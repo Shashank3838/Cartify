@@ -4,7 +4,11 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-// REGISTER
+// 🔥 FIXED IMPORT
+const { authMiddleware } = require("../middleware/authMiddleware");
+
+
+// ================= REGISTER =================
 router.post("/register", async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -19,7 +23,8 @@ router.post("/register", async (req, res) => {
     const user = new User({
       name,
       email,
-      password: hashedPassword
+      password: hashedPassword,
+      role: "user"
     });
 
     await user.save();
@@ -31,7 +36,8 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// LOGIN (only ONCE)
+
+// ================= LOGIN =================
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -47,14 +53,63 @@ router.post("/login", async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user._id },
+      {
+        id: user._id,
+        role: user.role || "user",
+      },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
 
     res.json({
       message: "Login successful",
-      token
+      token,
+      role: user.role,
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+// ================= PROTECTED ROUTE =================
+router.get("/protected", authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).lean();
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({
+      message: "You accessed protected route!",
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role || "user"
+      }
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+// ================= BECOME SELLER =================
+router.put("/become-seller", authMiddleware, async (req, res) => {
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user.id,
+      { role: "seller" },
+      { new: true }
+    ).select("-password");
+
+    res.json({
+      message: "You are now a seller 🚀",
+      user: updatedUser
     });
 
   } catch (error) {
