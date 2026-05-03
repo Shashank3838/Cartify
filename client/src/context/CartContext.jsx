@@ -46,10 +46,7 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     fetchCart();
 
-    // ✅ when user comes back to tab
     const handleFocus = () => fetchCart();
-
-    // ✅ when login/logout happens (token changes)
     const handleStorage = () => fetchCart();
 
     window.addEventListener("focus", handleFocus);
@@ -135,11 +132,14 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // 🔥 TOTAL
+  // 🔥 TOTAL PRICE
   const total = cart.reduce(
     (acc, item) => acc + item.price * item.qty,
     0
   );
+
+  // 🔥 🔥 NEW: TOTAL ITEM COUNT (IMPORTANT)
+  const cartCount = cart.reduce((acc, item) => acc + item.qty, 0);
 
   return (
     <CartContext.Provider
@@ -152,6 +152,7 @@ export const CartProvider = ({ children }) => {
         increaseQty,
         decreaseQty,
         total,
+        cartCount, // 🔥 expose this
       }}
     >
       {children}

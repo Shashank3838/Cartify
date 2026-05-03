@@ -14,7 +14,10 @@ function Cart() {
 
   const navigate = useNavigate();
 
-  // 🔥 FINAL RAZORPAY CHECKOUT
+  const DELIVERY = cart.length > 0 ? 40 : 0;
+  const GRAND_TOTAL = total + DELIVERY;
+
+  // 🔥 CHECKOUT (UNCHANGED)
   const handleCheckout = async () => {
     try {
       if (!cart || cart.length === 0) {
@@ -29,9 +32,6 @@ function Cart() {
         return;
       }
 
-      // ===============================
-      // 1️⃣ CREATE RAZORPAY ORDER
-      // ===============================
       const orderRes = await fetch(
         "http://localhost:5000/api/payment/create-order",
         {
@@ -40,7 +40,7 @@ function Cart() {
             "Content-Type": "application/json",
             Authorization: "Bearer " + token,
           },
-          body: JSON.stringify({ amount: total }),
+          body: JSON.stringify({ amount: GRAND_TOTAL }),
         }
       );
 
@@ -51,26 +51,18 @@ function Cart() {
         return;
       }
 
-      // ===============================
-      // 2️⃣ OPEN RAZORPAY POPUP
-      // ===============================
       const options = {
-        key: "rzp_test_SfLPPwPyaJO937", // ✅ your key
+        key: "rzp_test_SfLPPwPyaJO937",
         amount: orderData.amount,
         currency: "INR",
-        name: "MyStore",
+        name: "Cartify",
         description: "Order Payment",
         order_id: orderData.id,
 
         handler: async function (response) {
           try {
-            console.log("💰 Payment success:", response);
-
-            // ===============================
-            // 3️⃣ CREATE ORDER WITH PAYMENT ID
-            // ===============================
-            const res = await fetch(
-              "http://localhost:5000/api/orders",
+            const verifyRes = await fetch(
+              "http://localhost:5000/api/payment/verify",
               {
                 method: "POST",
                 headers: {
@@ -78,130 +70,170 @@ function Cart() {
                   Authorization: "Bearer " + token,
                 },
                 body: JSON.stringify({
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature,
                   products: cart.map((item) => ({
                     product: item.product?._id || item._id,
                     quantity: item.qty,
                   })),
-                  paymentId: response.razorpay_payment_id, // 🔥 IMPORTANT
                 }),
               }
             );
 
-            const data = await res.json();
+            const verifyData = await verifyRes.json();
 
-            if (!res.ok) {
-              console.error("❌ Order failed:", data);
-              alert("Order creation failed ❌");
+            if (!verifyRes.ok) {
+              alert("Payment verification failed ❌");
               return;
             }
 
-            // ===============================
-            // 4️⃣ CLEAR CART (BACKEND)
-            // ===============================
-            await fetch("http://localhost:5000/api/cart/clear", {
-              method: "DELETE",
-              headers: {
-                Authorization: "Bearer " + token,
-              },
-            });
-
-            // ===============================
-            // 5️⃣ CLEAR UI CART
-            // ===============================
+            alert("Payment successful 🎉");
             setCart([]);
-
-            alert("Payment successful 🎉 Order placed!");
-
             navigate("/my-orders");
 
           } catch (err) {
-            console.error("🔥 POST PAYMENT ERROR:", err);
-            alert("Payment success but something failed");
+            alert("Verification error");
           }
         },
 
-        prefill: {
-          name: "User",
-          email: "test@example.com",
-        },
-
-        theme: {
-          color: "#16a34a",
-        },
+        theme: { color: "#111827" },
       };
 
       const razor = new window.Razorpay(options);
       razor.open();
 
     } catch (err) {
-      console.error("CHECKOUT ERROR:", err);
-      alert("Something went wrong during payment");
+      alert("Payment error");
     }
   };
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      <h2 className="text-2xl font-bold mb-6">🛒 Your Cart</h2>
+    <div className="bg-gray-100 min-h-screen px-6 py-10">
+      <h2 className="text-3xl font-bold mb-8 tracking-wide">
+        🛒 Your Cart
+      </h2>
 
+      {/* 🔥 EMPTY STATE */}
       {cart.length === 0 ? (
-        <p className="text-gray-500">Your cart is empty</p>
+        <div className="flex flex-col items-center justify-center mt-24 text-gray-500">
+          <p className="text-2xl mb-3">🛍️</p>
+          <p className="text-lg">Your cart is empty</p>
+          <button
+            onClick={() => navigate("/")}
+            className="mt-5 px-6 py-2 bg-black text-white rounded-full hover:opacity-90 transition"
+          >
+            Browse Products
+          </button>
+        </div>
       ) : (
-        <div className="space-y-4">
-          {cart.map((item) => (
-            <div
-              key={item._id}
-              className="bg-white p-4 rounded shadow flex items-center justify-between"
-            >
-              <div className="flex items-center gap-4">
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="w-20 h-20 object-cover rounded"
-                />
-                <div>
-                  <h3 className="font-semibold">{item.name}</h3>
-                  <p>₹{item.price}</p>
+        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
 
-                  <div className="flex items-center gap-2 mt-2">
+          {/* 🔥 LEFT SIDE */}
+          <div className="md:col-span-2 space-y-6">
+            {cart.map((item) => (
+              <div
+                key={item._id}
+                className="bg-white rounded-2xl p-5 flex gap-5
+                shadow-md hover:shadow-2xl hover:-translate-y-1
+                transition-all duration-300"
+              >
+                {/* IMAGE */}
+                <div className="w-28 h-28 bg-gray-50 rounded-xl flex items-center justify-center overflow-hidden">
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="object-contain h-full w-full"
+                  />
+                </div>
+
+                {/* DETAILS */}
+                <div className="flex flex-col flex-grow justify-between">
+                  <div>
+                    <h3 className="font-semibold text-gray-800 text-sm">
+                      {item.name}
+                    </h3>
+
+                    <p className="text-black font-bold mt-2">
+                      ₹{item.price}
+                    </p>
+                  </div>
+
+                  {/* 🔥 QTY CONTROL */}
+                  <div className="flex items-center gap-3 mt-3">
                     <button
                       onClick={() => decreaseQty(item._id)}
-                      className="px-2 bg-gray-300 rounded"
+                      className="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center text-lg"
                     >
-                      -
+                      −
                     </button>
 
-                    <span>{item.qty}</span>
+                    <span className="font-medium">{item.qty}</span>
 
                     <button
                       onClick={() => increaseQty(item._id)}
-                      className="px-2 bg-gray-300 rounded"
+                      className="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center text-lg"
                     >
                       +
                     </button>
                   </div>
                 </div>
+
+                {/* RIGHT SIDE */}
+                <div className="flex flex-col justify-between items-end">
+                  <p className="font-bold text-gray-900">
+                    ₹{item.price * item.qty}
+                  </p>
+
+                  <button
+                    onClick={() => removeFromCart(item._id)}
+                    className="text-gray-400 hover:text-red-500 text-sm transition"
+                  >
+                    ✕ Remove
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* 🔥 RIGHT SIDE */}
+          <div className="bg-white rounded-2xl shadow-lg p-6 h-fit sticky top-24">
+            <h3 className="text-lg font-semibold mb-5">
+              Order Summary
+            </h3>
+
+            <div className="space-y-3 text-gray-600 text-sm">
+              <div className="flex justify-between">
+                <span>Items</span>
+                <span>{cart.length}</span>
               </div>
 
-              <button
-                onClick={() => removeFromCart(item._id)}
-                className="bg-red-500 text-white px-4 py-2 rounded"
-              >
-                Remove
-              </button>
-            </div>
-          ))}
+              <div className="flex justify-between">
+                <span>Subtotal</span>
+                <span>₹{total}</span>
+              </div>
 
-          {/* TOTAL + PAYMENT */}
-          <div className="text-right mt-6">
-            <h3 className="text-xl font-bold mb-3">
-              Total: ₹{total}
-            </h3>
+              <div className="flex justify-between">
+                <span>Delivery</span>
+                <span>₹{DELIVERY}</span>
+              </div>
+            </div>
+
+            <hr className="my-5" />
+
+            <div className="flex justify-between font-bold text-lg mb-6">
+              <span>Grand Total</span>
+              <span>₹{GRAND_TOTAL}</span>
+            </div>
 
             <button
               onClick={handleCheckout}
-              className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition"
+              className="w-full py-3 rounded-xl
+              bg-black text-white font-medium tracking-wide
+              hover:bg-gray-900 hover:shadow-xl hover:scale-[1.02]
+              active:scale-95 transition-all duration-200"
             >
-              Pay Now 💳
+              Proceed to Pay 💳
             </button>
           </div>
         </div>

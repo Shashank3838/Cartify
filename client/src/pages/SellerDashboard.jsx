@@ -13,7 +13,6 @@ function SellerDashboard() {
     description: "",
   });
 
-  // FETCH PRODUCTS
   const fetchMyProducts = async () => {
     const res = await fetch("http://localhost:5000/api/products/my-products", {
       headers: {
@@ -29,7 +28,6 @@ function SellerDashboard() {
     fetchMyProducts();
   }, []);
 
-  // ADD PRODUCT
   const handleAddProduct = async (e) => {
     e.preventDefault();
 
@@ -49,7 +47,6 @@ function SellerDashboard() {
     fetchMyProducts();
   };
 
-  // DELETE
   const handleDelete = async (id) => {
     await fetch(`http://localhost:5000/api/products/${id}`, {
       method: "DELETE",
@@ -61,7 +58,6 @@ function SellerDashboard() {
     fetchMyProducts();
   };
 
-  // START EDIT
   const handleEditClick = (product) => {
     setEditingId(product._id);
     setEditData({
@@ -71,7 +67,6 @@ function SellerDashboard() {
     });
   };
 
-  // SAVE EDIT
   const handleUpdate = async (id) => {
     await fetch(`http://localhost:5000/api/products/${id}`, {
       method: "PUT",
@@ -87,109 +82,157 @@ function SellerDashboard() {
   };
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4">Seller Dashboard 📦</h2>
+    <div className="bg-gray-100 min-h-screen px-6 py-8">
+      <div className="max-w-4xl mx-auto">
 
-      {/* ADD PRODUCT */}
-      <form onSubmit={handleAddProduct} className="bg-white p-4 rounded shadow mb-6">
-        <input
-          type="text"
-          placeholder="Product Name"
-          className="w-full mb-3 p-2 border rounded"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
+        {/* TITLE */}
+        <h2 className="text-3xl font-semibold text-gray-900 mb-6">
+          Seller Dashboard 📦
+        </h2>
 
-        <input
-          type="number"
-          placeholder="Price"
-          className="w-full mb-3 p-2 border rounded"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-        />
+        {/* ADD PRODUCT CARD */}
+        <form
+          onSubmit={handleAddProduct}
+          className="bg-white rounded-2xl shadow-lg p-6 mb-8"
+        >
+          <h3 className="text-lg font-medium mb-4 text-gray-800">
+            Add New Product
+          </h3>
 
-        <textarea
-          placeholder="Description"
-          className="w-full mb-3 p-2 border rounded"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
+          <input
+            type="text"
+            placeholder="Product Name"
+            className="w-full mb-3 px-4 py-2 rounded-lg border border-gray-300 
+            focus:outline-none focus:ring-2 focus:ring-gray-400"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
 
-        <button className="w-full bg-black text-white py-2 rounded">
-          Add Product
-        </button>
-      </form>
+          <input
+            type="number"
+            placeholder="Price"
+            className="w-full mb-3 px-4 py-2 rounded-lg border border-gray-300 
+            focus:outline-none focus:ring-2 focus:ring-gray-400"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+          />
 
-      {/* PRODUCTS */}
-      <h3 className="text-xl font-semibold mb-3">My Products</h3>
+          <textarea
+            placeholder="Description"
+            className="w-full mb-4 px-4 py-2 rounded-lg border border-gray-300 
+            focus:outline-none focus:ring-2 focus:ring-gray-400"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
 
-      {products.map((p) => (
-        <div key={p._id} className="bg-white p-4 rounded shadow mb-3">
+          <button
+            className="w-full py-2.5 rounded-xl bg-black text-white 
+            font-medium tracking-wide
+            hover:bg-gray-900 hover:scale-[1.02] 
+            active:scale-95 transition-all"
+          >
+            Add Product
+          </button>
+        </form>
 
-          {editingId === p._id ? (
-            <>
-              <input
-                className="border p-1 mb-2 w-full"
-                value={editData.name}
-                onChange={(e) =>
-                  setEditData({ ...editData, name: e.target.value })
-                }
-              />
-              <input
-                className="border p-1 mb-2 w-full"
-                value={editData.price}
-                onChange={(e) =>
-                  setEditData({ ...editData, price: e.target.value })
-                }
-              />
-              <input
-                className="border p-1 mb-2 w-full"
-                value={editData.description}
-                onChange={(e) =>
-                  setEditData({ ...editData, description: e.target.value })
-                }
-              />
+        {/* PRODUCTS */}
+        <h3 className="text-xl font-semibold mb-4 text-gray-800">
+          My Products
+        </h3>
 
-              <button
-                onClick={() => handleUpdate(p._id)}
-                className="bg-green-500 text-white px-3 py-1 mr-2 rounded"
-              >
-                Save
-              </button>
+        <div className="space-y-4">
+          {products.map((p) => (
+            <div
+              key={p._id}
+              className="bg-white rounded-2xl shadow-md p-5 
+              hover:shadow-xl transition-all duration-300"
+            >
+              {editingId === p._id ? (
+                <>
+                  <input
+                    className="w-full mb-2 px-3 py-2 border rounded-lg"
+                    value={editData.name}
+                    onChange={(e) =>
+                      setEditData({ ...editData, name: e.target.value })
+                    }
+                  />
 
-              <button
-                onClick={() => setEditingId(null)}
-                className="bg-gray-400 text-white px-3 py-1 rounded"
-              >
-                Cancel
-              </button>
-            </>
-          ) : (
-            <>
-              <h4 className="font-bold">{p.name}</h4>
-              <p>₹{p.price}</p>
+                  <input
+                    className="w-full mb-2 px-3 py-2 border rounded-lg"
+                    value={editData.price}
+                    onChange={(e) =>
+                      setEditData({ ...editData, price: e.target.value })
+                    }
+                  />
 
-              <p className="text-sm">
-                {p.isApproved ? "Approved ✅" : "Pending ⏳"}
-              </p>
+                  <textarea
+                    className="w-full mb-3 px-3 py-2 border rounded-lg"
+                    value={editData.description}
+                    onChange={(e) =>
+                      setEditData({
+                        ...editData,
+                        description: e.target.value,
+                      })
+                    }
+                  />
 
-              <button
-                onClick={() => handleEditClick(p)}
-                className="bg-blue-500 text-white px-3 py-1 mr-2 rounded"
-              >
-                Edit
-              </button>
+                  <button
+                    onClick={() => handleUpdate(p._id)}
+                    className="bg-green-500 hover:bg-green-600 text-white px-4 py-1.5 rounded-lg mr-2"
+                  >
+                    Save
+                  </button>
 
-              <button
-                onClick={() => handleDelete(p._id)}
-                className="bg-red-500 text-white px-3 py-1 rounded"
-              >
-                Delete
-              </button>
-            </>
-          )}
+                  <button
+                    onClick={() => setEditingId(null)}
+                    className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-1.5 rounded-lg"
+                  >
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h4 className="font-semibold text-gray-900">
+                      {p.name}
+                    </h4>
+
+                    <p className="font-bold mt-1">₹{p.price}</p>
+
+                    <div className="mt-2">
+                      {p.isApproved ? (
+                        <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">
+                          Approved
+                        </span>
+                      ) : (
+                        <span className="text-xs px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full">
+                          Pending
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleEditClick(p)}
+                      className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-lg text-sm"
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      onClick={() => handleDelete(p._id)}
+                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg text-sm"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
         </div>
-      ))}
+      </div>
     </div>
   );
 }

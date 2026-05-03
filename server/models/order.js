@@ -29,21 +29,34 @@ const orderSchema = new mongoose.Schema({
     required: true
   },
 
-  // 🔥 ORDER STATUS
+  // 🔥 ORDER STATUS (UPDATED)
   status: {
     type: String,
-    enum: ["pending", "paid", "shipped", "delivered", "cancelled"],
+    enum: [
+      "pending",
+      "paid",
+      "shipped",
+      "delivered",
+      "cancelled",
+      "return_requested", // 🔥 NEW
+      "refunded"          // 🔥 NEW
+    ],
     default: "pending"
   },
 
-  // 🔥 PAYMENT STATUS
+  // 🔥 PAYMENT STATUS (UPDATED)
   paymentStatus: {
     type: String,
-    enum: ["pending", "success", "failed"],
+    enum: [
+      "pending",
+      "success",
+      "failed",
+      "refunded" // 🔥 NEW (IMPORTANT)
+    ],
     default: "pending"
   },
 
-  // 🔥 NEW (VERY IMPORTANT)
+  // 🔥 PAYMENT ID
   paymentId: {
     type: String
   }
