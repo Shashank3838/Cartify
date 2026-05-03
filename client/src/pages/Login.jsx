@@ -12,7 +12,7 @@ function Login() {
 
     try {
       const res = await fetch(
-        "https://cartify-backend.onrender.com/api/auth/login",
+        "https://cartify-backend-s1hd.onrender.com/api/auth/login",
         {
           method: "POST",
           headers: {

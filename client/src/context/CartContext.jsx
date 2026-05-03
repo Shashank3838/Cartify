@@ -15,7 +15,7 @@ export const CartProvider = ({ children }) => {
         return;
       }
 
-      const res = await fetch("http://https://cartify-backend.onrender.com/api/cart", {
+      const res = await fetch("https://cartify-backend-s1hd.onrender.com/api/cart", {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -61,7 +61,7 @@ export const CartProvider = ({ children }) => {
   // 🔥 ADD TO CART
   const addToCart = async (product) => {
     try {
-      await fetch("http://https://cartify-backend.onrender.com/api/cart", {
+      await fetch("https://cartify-backend-s1hd.onrender.com/api/cart", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -82,7 +82,7 @@ export const CartProvider = ({ children }) => {
   // 🔥 REMOVE FROM CART
   const removeFromCart = async (id) => {
     try {
-      await fetch(`http://https://cartify-backend.onrender.com/api/cart/${id}`, {
+      await fetch(`https://cartify-backend-s1hd.onrender.com/api/cart/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
@@ -98,7 +98,7 @@ export const CartProvider = ({ children }) => {
   // 🔥 INCREASE QTY
   const increaseQty = async (id) => {
     try {
-      await fetch("http://https://cartify-backend.onrender.com/api/cart", {
+      await fetch("https://cartify-backend-s1hd.onrender.com/api/cart", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -119,7 +119,7 @@ export const CartProvider = ({ children }) => {
   // 🔥 DECREASE QTY
   const decreaseQty = async (id) => {
     try {
-      await fetch(`http://https://cartify-backend.onrender.com/api/cart/${id}`, {
+      await fetch(`https://cartify-backend-s1hd.onrender.com/api/cart/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),

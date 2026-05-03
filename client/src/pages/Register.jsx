@@ -12,7 +12,7 @@ function Register() {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://https://cartify-backend.onrender.com/api/auth/register", {
+      const res = await fetch("https://cartify-backend-s1hd.onrender.com/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

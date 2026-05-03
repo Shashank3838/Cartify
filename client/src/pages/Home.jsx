@@ -21,7 +21,7 @@ function Home() {
   useEffect(() => {
     setLoading(true);
 
-    fetch("http://https://cartify-backend.onrender.com/api/products")
+    fetch("https://cartify-backend-s1hd.onrender.com/api/products")
       .then((res) => res.json())
       .then((data) => {
         const approvedProducts = data.filter(

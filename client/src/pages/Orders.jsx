@@ -59,7 +59,7 @@ function Orders() {
 
   const fetchOrders = async () => {
     try {
-      const res = await fetch("http://https://cartify-backend.onrender.com/api/orders/my-orders", {
+      const res = await fetch("https://cartify-backend-s1hd.onrender.com/api/orders/my-orders", {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
@@ -86,7 +86,7 @@ function Orders() {
 
   const cancelOrder = async (id) => {
     setCancellingId(id);
-    await fetch(`http://https://cartify-backend.onrender.com/api/orders/cancel/${id}`, {
+    await fetch(`https://cartify-backend-s1hd.onrender.com/api/orders/cancel/${id}`, {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -98,7 +98,7 @@ function Orders() {
 
   const requestReturn = async (id) => {
     setReturningId(id);
-    await fetch(`http://https://cartify-backend.onrender.com/api/orders/return/${id}`, {
+    await fetch(`https://cartify-backend-s1hd.onrender.com/api/orders/return/${id}`, {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
