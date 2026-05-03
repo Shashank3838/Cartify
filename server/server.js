@@ -24,13 +24,17 @@ const paymentRoutes = require("./routes/paymentRoutes");
 // ================= USE ROUTES =================
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
-app.use("/api/orders", orderRoutes); // ✅ IMPORTANT (already correct)
+app.use("/api/orders", orderRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/payment", paymentRoutes);
 
-// ================= TEST ROUTE =================
+// ================= TEST ROUTES =================
 app.get("/", (req, res) => {
   res.send("API is running...");
+});
+
+app.get("/test", (req, res) => {
+  res.send("TEST OK");
 });
 
 // ================= DB CONNECT =================
@@ -40,6 +44,9 @@ mongoose
   .catch((err) => console.log(err));
 
 // ================= SERVER =================
-app.listen(5000, () => {
-  console.log("🚀 Server running on port 5000");
+// 🔥 FIX FOR RENDER (IMPORTANT)
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
 });
