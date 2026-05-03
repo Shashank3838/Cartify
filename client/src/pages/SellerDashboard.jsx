@@ -14,7 +14,7 @@ function SellerDashboard() {
   });
 
   const fetchMyProducts = async () => {
-    const res = await fetch("http://localhost:5000/api/products/my-products", {
+    const res = await fetch("http://https://cartify-backend.onrender.com/api/products/my-products", {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
@@ -31,7 +31,7 @@ function SellerDashboard() {
   const handleAddProduct = async (e) => {
     e.preventDefault();
 
-    await fetch("http://localhost:5000/api/products", {
+    await fetch("http://https://cartify-backend.onrender.com/api/products", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -48,7 +48,7 @@ function SellerDashboard() {
   };
 
   const handleDelete = async (id) => {
-    await fetch(`http://localhost:5000/api/products/${id}`, {
+    await fetch(`http://https://cartify-backend.onrender.com/api/products/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -68,7 +68,7 @@ function SellerDashboard() {
   };
 
   const handleUpdate = async (id) => {
-    await fetch(`http://localhost:5000/api/products/${id}`, {
+    await fetch(`http://https://cartify-backend.onrender.com/api/products/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

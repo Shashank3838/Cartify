@@ -8,7 +8,7 @@ function AdminDashboard() {
 
   const fetchProducts = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/products/admin", {
+      const res = await fetch("http://https://cartify-backend.onrender.com/api/products/admin", {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
@@ -31,7 +31,7 @@ function AdminDashboard() {
 
   const updateProductStatus = async (id, type) => {
     const res = await fetch(
-      `http://localhost:5000/api/products/${id}/${type}`,
+      `http://https://cartify-backend.onrender.com/api/products/${id}/${type}`,
       {
         method: "PUT",
         headers: {
@@ -47,7 +47,7 @@ function AdminDashboard() {
 
   const fetchOrders = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/orders", {
+      const res = await fetch("http://https://cartify-backend.onrender.com/api/orders", {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
@@ -70,7 +70,7 @@ function AdminDashboard() {
 
   const updateOrderStatus = async (id, status) => {
     const res = await fetch(
-      `http://localhost:5000/api/orders/${id}/status`,
+      `http://https://cartify-backend.onrender.com/api/orders/${id}/status`,
       {
         method: "PUT",
         headers: {

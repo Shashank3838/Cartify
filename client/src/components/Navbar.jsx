@@ -39,7 +39,7 @@ function Navbar() {
           return;
         }
 
-        const res = await fetch("http://localhost:5000/api/auth/protected", {
+        const res = await fetch("https://cartify-backend.onrender.com/api/auth/protected", {
           headers: {
             Authorization: "Bearer " + token,
           },
@@ -77,7 +77,7 @@ function Navbar() {
 
   const becomeSeller = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/auth/become-seller", {
+      const res = await fetch("http://https://cartify-backend.onrender.com/api/auth/become-seller", {
         method: "PUT",
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),

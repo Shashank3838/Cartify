@@ -33,7 +33,7 @@ function Cart() {
       }
 
       const orderRes = await fetch(
-        "http://localhost:5000/api/payment/create-order",
+        "http://https://cartify-backend.onrender.com/api/payment/create-order",
         {
           method: "POST",
           headers: {
@@ -62,7 +62,7 @@ function Cart() {
         handler: async function (response) {
           try {
             const verifyRes = await fetch(
-              "http://localhost:5000/api/payment/verify",
+              "http://https://cartify-backend.onrender.com/api/payment/verify",
               {
                 method: "POST",
                 headers: {

@@ -16,7 +16,7 @@ function ProductDetail() {
   useEffect(() => {
     setLoading(true);
 
-    fetch(`http://localhost:5000/api/products/${id}`)
+    fetch(`http://https://cartify-backend.onrender.com/api/products/${id}`)
       .then((res) => res.json())
       .then((data) => setProduct(data))
       .catch((err) => console.error(err))
