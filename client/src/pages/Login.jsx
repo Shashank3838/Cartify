@@ -11,13 +11,16 @@ function Login() {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://https://cartify-backend.onrender.com/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      const res = await fetch(
+        "https://cartify-backend.onrender.com/api/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
       const data = await res.json();
 
@@ -45,12 +48,10 @@ function Login() {
         border border-gray-200 rounded-2xl p-8 
         shadow-xl transition-all"
       >
-        {/* TITLE */}
         <h2 className="text-2xl font-semibold text-center text-gray-900 mb-6">
           Welcome Back 👋
         </h2>
 
-        {/* EMAIL */}
         <div className="mb-4">
           <label className="text-sm text-gray-600 mb-1 block">
             Email
@@ -66,7 +67,6 @@ function Login() {
           />
         </div>
 
-        {/* PASSWORD */}
         <div className="mb-5">
           <label className="text-sm text-gray-600 mb-1 block">
             Password
@@ -82,7 +82,6 @@ function Login() {
           />
         </div>
 
-        {/* BUTTON */}
         <button
           className="w-full py-2.5 rounded-lg 
           bg-black text-white font-medium tracking-wide
@@ -92,7 +91,6 @@ function Login() {
           Login
         </button>
 
-        {/* REGISTER LINK */}
         <p className="text-sm text-gray-500 text-center mt-5">
           Don’t have an account?{" "}
           <span
