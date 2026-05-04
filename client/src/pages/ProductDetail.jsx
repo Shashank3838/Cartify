@@ -8,7 +8,6 @@ function ProductDetail() {
   const [loading, setLoading] = useState(true);
   const { addToCart } = useContext(CartContext);
 
-  // ⭐ STATES
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
   const [reviews, setReviews] = useState([]);
@@ -22,12 +21,10 @@ function ProductDetail() {
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
 
-    // 🔥 LOAD REVIEWS FROM STORAGE
     const stored = JSON.parse(localStorage.getItem(`reviews_${id}`)) || [];
     setReviews(stored);
   }, [id]);
 
-  // ⭐ ADD REVIEW
   const handleAddReview = () => {
     if (!rating || !reviewText.trim()) {
       alert("Please add rating and review");
@@ -49,7 +46,6 @@ function ProductDetail() {
     setReviewText("");
   };
 
-  // ⭐ AVG RATING
   const avgRating =
     reviews.length > 0
       ? (
@@ -75,33 +71,30 @@ function ProductDetail() {
 
   return (
     <div className="min-h-screen bg-gray-100 px-6 py-10">
-      <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-lg p-8 grid md:grid-cols-2 gap-10">
+      <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-lg p-8 grid grid-cols-1 md:grid-cols-2 gap-10">
 
-        {/* IMAGE */}
         <div className="flex items-center justify-center">
           <div className="w-full max-w-md bg-gray-50 rounded-2xl p-4 shadow-inner">
             <img
               src={product.image || "https://via.placeholder.com/500"}
               alt={product.name}
-              className="w-full h-[380px] object-contain rounded-xl 
+              className="w-full h-[260px] sm:h-[320px] md:h-[380px] object-contain rounded-xl 
               transition-transform duration-500 hover:scale-105"
             />
           </div>
         </div>
 
-        {/* DETAILS */}
         <div className="flex flex-col justify-between">
 
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
               {product.name}
             </h1>
 
-            <p className="text-2xl font-bold mt-4">
+            <p className="text-xl sm:text-2xl font-bold mt-4">
               ₹{product.price}
             </p>
 
-            {/* ⭐ AVG RATING */}
             <div className="mt-3 text-yellow-500 text-lg">
               {"⭐".repeat(Math.round(avgRating))}
               <span className="text-gray-700 text-sm ml-2">
@@ -116,7 +109,6 @@ function ProductDetail() {
             </div>
           </div>
 
-          {/* ACTIONS */}
           <div className="mt-8 space-y-3">
             <button
               onClick={() => addToCart(product)}
@@ -134,14 +126,12 @@ function ProductDetail() {
         </div>
       </div>
 
-      {/* ⭐ REVIEW SECTION */}
       <div className="max-w-6xl mx-auto mt-10 bg-white p-6 rounded-2xl shadow">
 
         <h2 className="text-xl font-semibold mb-4">
           ⭐ Ratings & Reviews
         </h2>
 
-        {/* ⭐ SELECT RATING */}
         <div className="flex gap-2 text-2xl mb-3 cursor-pointer">
           {[1, 2, 3, 4, 5].map((num) => (
             <span
@@ -154,7 +144,6 @@ function ProductDetail() {
           ))}
         </div>
 
-        {/* ✍️ INPUT */}
         <textarea
           value={reviewText}
           onChange={(e) => setReviewText(e.target.value)}
@@ -169,7 +158,6 @@ function ProductDetail() {
           Submit Review
         </button>
 
-        {/* 🧾 REVIEWS LIST */}
         <div className="mt-6 space-y-4">
           {reviews.length === 0 ? (
             <p className="text-gray-500">No reviews yet</p>

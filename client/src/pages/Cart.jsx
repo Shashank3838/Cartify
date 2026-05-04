@@ -125,17 +125,17 @@ function Cart() {
           </button>
         </div>
       ) : (
-        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
 
           <div className="md:col-span-2 space-y-6">
             {cart.map((item) => (
               <div
                 key={item._id}
-                className="bg-white rounded-2xl p-5 flex gap-5
+                className="bg-white rounded-2xl p-5 flex flex-col sm:flex-row gap-5
                 shadow-md hover:shadow-2xl hover:-translate-y-1
                 transition-all duration-300"
               >
-                <div className="w-28 h-28 bg-gray-50 rounded-xl flex items-center justify-center overflow-hidden">
+                <div className="w-full sm:w-28 h-28 bg-gray-50 rounded-xl flex items-center justify-center overflow-hidden">
                   <img
                     src={item.image}
                     alt={item.name}
@@ -173,7 +173,7 @@ function Cart() {
                   </div>
                 </div>
 
-                <div className="flex flex-col justify-between items-end">
+                <div className="flex flex-col justify-between items-start sm:items-end">
                   <p className="font-bold text-gray-900">
                     ₹{item.price * item.qty}
                   </p>

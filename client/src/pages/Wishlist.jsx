@@ -25,7 +25,7 @@ function Wishlist() {
       {wishlist.length === 0 ? (
         <p className="text-gray-500">No items in wishlist</p>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {wishlist.map((p) => (
             <div
               key={p._id}
@@ -35,7 +35,6 @@ function Wishlist() {
               hover:-translate-y-1 flex flex-col cursor-pointer"
             >
 
-              {/* ❌ REMOVE */}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -46,7 +45,6 @@ function Wishlist() {
                 ❌
               </button>
 
-              {/* IMAGE */}
               <div className="h-44 w-full overflow-hidden">
                 <img
                   src={p.image || "https://via.placeholder.com/300"}
@@ -55,7 +53,6 @@ function Wishlist() {
                 />
               </div>
 
-              {/* CONTENT */}
               <div className="p-4 flex flex-col flex-grow">
                 <h3 className="font-semibold text-sm text-gray-800">
                   {p.name}

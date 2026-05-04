@@ -109,7 +109,7 @@ function Navbar() {
     }`;
 
   return (
-    <nav className="sticky top-4 z-50 mx-6 rounded-2xl px-8 py-3 flex items-center justify-between
+    <nav className="sticky top-4 z-50 mx-6 rounded-2xl px-8 py-3 flex flex-wrap items-center justify-between gap-3
       bg-white/70 backdrop-blur-lg border border-gray-200
       shadow-lg">
 
@@ -121,7 +121,7 @@ function Navbar() {
         Cartify 🛍️
       </h1>
 
-      <div className="flex items-center w-[360px] bg-white 
+      <div className="flex items-center w-full max-w-[360px] bg-white 
         border border-gray-300 rounded-full px-4 py-1.5 
         focus-within:ring-2 focus-within:ring-gray-400 transition">
 
@@ -142,7 +142,7 @@ function Navbar() {
         </button>
       </div>
 
-      <div className="flex items-center gap-6 text-sm font-medium">
+      <div className="flex flex-wrap items-center gap-6 text-sm font-medium">
 
         <Link to="/" className={linkStyle("/")}>Home</Link>
 
