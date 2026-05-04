@@ -12,7 +12,7 @@ function Register() {
     e.preventDefault();
 
     try {
-      const res = await fetch("https://cartify-backend-s1hd.onrender.com/api/auth/register", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -44,12 +44,10 @@ function Register() {
         border border-gray-200 rounded-2xl p-8 
         shadow-xl transition-all"
       >
-        {/* TITLE */}
         <h2 className="text-2xl font-semibold text-center text-gray-900 mb-6">
           Create Account 🚀
         </h2>
 
-        {/* NAME */}
         <div className="mb-4">
           <label className="text-sm text-gray-600 mb-1 block">
             Name
@@ -65,7 +63,6 @@ function Register() {
           />
         </div>
 
-        {/* EMAIL */}
         <div className="mb-4">
           <label className="text-sm text-gray-600 mb-1 block">
             Email
@@ -81,7 +78,6 @@ function Register() {
           />
         </div>
 
-        {/* PASSWORD */}
         <div className="mb-5">
           <label className="text-sm text-gray-600 mb-1 block">
             Password
@@ -97,7 +93,6 @@ function Register() {
           />
         </div>
 
-        {/* BUTTON */}
         <button
           className="w-full py-2.5 rounded-lg 
           bg-black text-white font-medium tracking-wide
@@ -107,7 +102,6 @@ function Register() {
           Register
         </button>
 
-        {/* LOGIN LINK */}
         <p className="text-sm text-gray-500 text-center mt-5">
           Already have an account?{" "}
           <span

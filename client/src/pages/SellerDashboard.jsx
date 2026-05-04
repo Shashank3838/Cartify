@@ -14,7 +14,7 @@ function SellerDashboard() {
   });
 
   const fetchMyProducts = async () => {
-    const res = await fetch("https://cartify-backend-s1hd.onrender.com/api/products/my-products", {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/products/my-products`, {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
@@ -31,7 +31,7 @@ function SellerDashboard() {
   const handleAddProduct = async (e) => {
     e.preventDefault();
 
-    await fetch("https://cartify-backend-s1hd.onrender.com/api/products", {
+    await fetch(`${import.meta.env.VITE_API_URL}/api/products`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -48,7 +48,7 @@ function SellerDashboard() {
   };
 
   const handleDelete = async (id) => {
-    await fetch(`https://cartify-backend-s1hd.onrender.com/api/products/${id}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/api/products/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -68,7 +68,7 @@ function SellerDashboard() {
   };
 
   const handleUpdate = async (id) => {
-    await fetch(`https://cartify-backend-s1hd.onrender.com/api/products/${id}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/api/products/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -85,12 +85,10 @@ function SellerDashboard() {
     <div className="bg-gray-100 min-h-screen px-6 py-8">
       <div className="max-w-4xl mx-auto">
 
-        {/* TITLE */}
         <h2 className="text-3xl font-semibold text-gray-900 mb-6">
           Seller Dashboard 📦
         </h2>
 
-        {/* ADD PRODUCT CARD */}
         <form
           onSubmit={handleAddProduct}
           className="bg-white rounded-2xl shadow-lg p-6 mb-8"
@@ -135,7 +133,6 @@ function SellerDashboard() {
           </button>
         </form>
 
-        {/* PRODUCTS */}
         <h3 className="text-xl font-semibold mb-4 text-gray-800">
           My Products
         </h3>

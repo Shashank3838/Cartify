@@ -17,7 +17,6 @@ function Cart() {
   const DELIVERY = cart.length > 0 ? 40 : 0;
   const GRAND_TOTAL = total + DELIVERY;
 
-  // 🔥 CHECKOUT (UNCHANGED)
   const handleCheckout = async () => {
     try {
       if (!cart || cart.length === 0) {
@@ -33,7 +32,7 @@ function Cart() {
       }
 
       const orderRes = await fetch(
-        "https://cartify-backend-s1hd.onrender.com/api/payment/create-order",
+        `${import.meta.env.VITE_API_URL}/api/payment/create-order`,
         {
           method: "POST",
           headers: {
@@ -62,7 +61,7 @@ function Cart() {
         handler: async function (response) {
           try {
             const verifyRes = await fetch(
-              "https://cartify-backend-s1hd.onrender.com/api/payment/verify",
+              `${import.meta.env.VITE_API_URL}/api/payment/verify`,
               {
                 method: "POST",
                 headers: {
@@ -114,7 +113,6 @@ function Cart() {
         🛒 Your Cart
       </h2>
 
-      {/* 🔥 EMPTY STATE */}
       {cart.length === 0 ? (
         <div className="flex flex-col items-center justify-center mt-24 text-gray-500">
           <p className="text-2xl mb-3">🛍️</p>
@@ -129,7 +127,6 @@ function Cart() {
       ) : (
         <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
 
-          {/* 🔥 LEFT SIDE */}
           <div className="md:col-span-2 space-y-6">
             {cart.map((item) => (
               <div
@@ -138,7 +135,6 @@ function Cart() {
                 shadow-md hover:shadow-2xl hover:-translate-y-1
                 transition-all duration-300"
               >
-                {/* IMAGE */}
                 <div className="w-28 h-28 bg-gray-50 rounded-xl flex items-center justify-center overflow-hidden">
                   <img
                     src={item.image}
@@ -147,7 +143,6 @@ function Cart() {
                   />
                 </div>
 
-                {/* DETAILS */}
                 <div className="flex flex-col flex-grow justify-between">
                   <div>
                     <h3 className="font-semibold text-gray-800 text-sm">
@@ -159,7 +154,6 @@ function Cart() {
                     </p>
                   </div>
 
-                  {/* 🔥 QTY CONTROL */}
                   <div className="flex items-center gap-3 mt-3">
                     <button
                       onClick={() => decreaseQty(item._id)}
@@ -179,7 +173,6 @@ function Cart() {
                   </div>
                 </div>
 
-                {/* RIGHT SIDE */}
                 <div className="flex flex-col justify-between items-end">
                   <p className="font-bold text-gray-900">
                     ₹{item.price * item.qty}
@@ -196,7 +189,6 @@ function Cart() {
             ))}
           </div>
 
-          {/* 🔥 RIGHT SIDE */}
           <div className="bg-white rounded-2xl shadow-lg p-6 h-fit sticky top-24">
             <h3 className="text-lg font-semibold mb-5">
               Order Summary

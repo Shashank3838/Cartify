@@ -4,7 +4,7 @@ import { CartContext } from "../context/CartContext";
 
 function Home() {
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true); // 🔥 NEW
+  const [loading, setLoading] = useState(true);
 
   const { addToCart } = useContext(CartContext);
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ function Home() {
   useEffect(() => {
     setLoading(true);
 
-    fetch("https://cartify-backend-s1hd.onrender.com/api/products")
+    fetch(`${import.meta.env.VITE_API_URL}/api/products`)
       .then((res) => res.json())
       .then((data) => {
         const approvedProducts = data.filter(
@@ -30,7 +30,7 @@ function Home() {
         setProducts(approvedProducts);
       })
       .catch((err) => console.error(err))
-      .finally(() => setLoading(false)); // 🔥 IMPORTANT
+      .finally(() => setLoading(false));
 
     const stored = JSON.parse(localStorage.getItem("wishlist")) || [];
     setWishlist(stored);
@@ -82,7 +82,6 @@ function Home() {
         {query ? `Search Results for "${query}" 🔍` : "Trending Products 🚀"}
       </h2>
 
-      {/* FILTER BAR */}
       <div className="bg-white p-4 rounded-xl shadow-sm mb-6 flex flex-wrap gap-4 items-center">
         <input
           type="number"
@@ -122,7 +121,6 @@ function Home() {
         </button>
       </div>
 
-      {/* 🔥 SKELETON LOADING */}
       {loading ? (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {[...Array(8)].map((_, i) => (

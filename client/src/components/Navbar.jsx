@@ -1,6 +1,6 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
-import { CartContext } from "../context/CartContext"; // 🔥 NEW
+import { CartContext } from "../context/CartContext";
 
 function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -8,7 +8,7 @@ function Navbar() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
-  const { cartCount } = useContext(CartContext); // 🔥 NEW
+  const { cartCount } = useContext(CartContext);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -39,7 +39,7 @@ function Navbar() {
           return;
         }
 
-        const res = await fetch("https://cartify-backend-s1hd.onrender.com/api/auth/protected", {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/protected`, {
           headers: {
             Authorization: "Bearer " + token,
           },
@@ -77,7 +77,7 @@ function Navbar() {
 
   const becomeSeller = async () => {
     try {
-      const res = await fetch("https://cartify-backend-s1hd.onrender.com/api/auth/become-seller", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/become-seller`, {
         method: "PUT",
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
@@ -113,7 +113,6 @@ function Navbar() {
       bg-white/70 backdrop-blur-lg border border-gray-200
       shadow-lg">
 
-      {/* LOGO */}
       <h1
         onClick={() => navigate("/")}
         className="text-xl font-semibold tracking-wide cursor-pointer
@@ -122,7 +121,6 @@ function Navbar() {
         Cartify 🛍️
       </h1>
 
-      {/* SEARCH */}
       <div className="flex items-center w-[360px] bg-white 
         border border-gray-300 rounded-full px-4 py-1.5 
         focus-within:ring-2 focus-within:ring-gray-400 transition">
@@ -144,12 +142,10 @@ function Navbar() {
         </button>
       </div>
 
-      {/* LINKS */}
       <div className="flex items-center gap-6 text-sm font-medium">
 
         <Link to="/" className={linkStyle("/")}>Home</Link>
 
-        {/* 🔥 CART WITH BADGE */}
         <Link to="/cart" className="relative">
           <span className={linkStyle("/cart")}>Cart 🛒</span>
 

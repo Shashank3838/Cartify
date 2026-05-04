@@ -17,7 +17,6 @@ const OrderTimeline = ({ status }) => {
           return (
             <div key={step} className="flex-1 flex flex-col items-center relative">
               
-              {/* LINE */}
               {index !== 0 && (
                 <div
                   className={`absolute top-3 left-[-50%] w-full h-[3px] ${
@@ -26,7 +25,6 @@ const OrderTimeline = ({ status }) => {
                 />
               )}
 
-              {/* CIRCLE */}
               <div
                 className={`w-8 h-8 flex items-center justify-center rounded-full text-xs font-bold z-10 transition ${
                   isCompleted
@@ -39,7 +37,6 @@ const OrderTimeline = ({ status }) => {
                 {index + 1}
               </div>
 
-              {/* LABEL */}
               <p className="text-xs mt-2 text-gray-600 text-center">
                 {labels[index]}
               </p>
@@ -59,7 +56,7 @@ function Orders() {
 
   const fetchOrders = async () => {
     try {
-      const res = await fetch("https://cartify-backend-s1hd.onrender.com/api/orders/my-orders", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders/my-orders`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
@@ -86,7 +83,7 @@ function Orders() {
 
   const cancelOrder = async (id) => {
     setCancellingId(id);
-    await fetch(`https://cartify-backend-s1hd.onrender.com/api/orders/cancel/${id}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/api/orders/cancel/${id}`, {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -98,7 +95,7 @@ function Orders() {
 
   const requestReturn = async (id) => {
     setReturningId(id);
-    await fetch(`https://cartify-backend-s1hd.onrender.com/api/orders/return/${id}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/api/orders/return/${id}`, {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -141,7 +138,6 @@ function Orders() {
             className="bg-white p-6 mb-6 rounded-2xl shadow-md hover:shadow-xl transition"
           >
 
-            {/* HEADER */}
             <div className="flex justify-between items-center mb-4">
               <p className="text-sm text-gray-500">
                 Order ID: {order._id.slice(-8)}
@@ -151,15 +147,12 @@ function Orders() {
               </p>
             </div>
 
-            {/* STATUS BADGE */}
             <div className="mb-2">{statusBadge(order.status)}</div>
 
-            {/* TIMELINE */}
             {!["cancelled", "refunded", "return_requested"].includes(order.status) && (
               <OrderTimeline status={order.status} />
             )}
 
-            {/* PAYMENT */}
             <div className="mt-4 text-sm text-gray-600">
               Payment:{" "}
               <span className="font-medium">
@@ -167,7 +160,6 @@ function Orders() {
               </span>
             </div>
 
-            {/* PRODUCTS */}
             <div className="mt-5 border-t pt-4">
               {order.products?.map((item, index) => (
                 <div
@@ -182,7 +174,6 @@ function Orders() {
               ))}
             </div>
 
-            {/* ACTIONS */}
             <div className="mt-5 flex gap-3">
               {(order.status === "pending" || order.status === "paid") && (
                 <button

@@ -16,7 +16,7 @@ function ProductDetail() {
   useEffect(() => {
     setLoading(true);
 
-    fetch(`https://cartify-backend-s1hd.onrender.com/api/products/${id}`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/products/${id}`)
       .then((res) => res.json())
       .then((data) => setProduct(data))
       .catch((err) => console.error(err))

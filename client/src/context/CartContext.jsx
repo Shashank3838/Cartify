@@ -15,7 +15,7 @@ export const CartProvider = ({ children }) => {
         return;
       }
 
-      const res = await fetch("https://cartify-backend-s1hd.onrender.com/api/cart", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/cart`, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -61,7 +61,7 @@ export const CartProvider = ({ children }) => {
   // 🔥 ADD TO CART
   const addToCart = async (product) => {
     try {
-      await fetch("https://cartify-backend-s1hd.onrender.com/api/cart", {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/cart`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -82,7 +82,7 @@ export const CartProvider = ({ children }) => {
   // 🔥 REMOVE FROM CART
   const removeFromCart = async (id) => {
     try {
-      await fetch(`https://cartify-backend-s1hd.onrender.com/api/cart/${id}`, {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/cart/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
@@ -98,7 +98,7 @@ export const CartProvider = ({ children }) => {
   // 🔥 INCREASE QTY
   const increaseQty = async (id) => {
     try {
-      await fetch("https://cartify-backend-s1hd.onrender.com/api/cart", {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/cart`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -119,7 +119,7 @@ export const CartProvider = ({ children }) => {
   // 🔥 DECREASE QTY
   const decreaseQty = async (id) => {
     try {
-      await fetch(`https://cartify-backend-s1hd.onrender.com/api/cart/${id}`, {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/cart/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
@@ -138,7 +138,7 @@ export const CartProvider = ({ children }) => {
     0
   );
 
-  // 🔥 🔥 NEW: TOTAL ITEM COUNT (IMPORTANT)
+  // 🔥 TOTAL ITEM COUNT
   const cartCount = cart.reduce((acc, item) => acc + item.qty, 0);
 
   return (
@@ -152,7 +152,7 @@ export const CartProvider = ({ children }) => {
         increaseQty,
         decreaseQty,
         total,
-        cartCount, // 🔥 expose this
+        cartCount,
       }}
     >
       {children}

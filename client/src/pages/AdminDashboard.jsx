@@ -8,7 +8,7 @@ function AdminDashboard() {
 
   const fetchProducts = async () => {
     try {
-      const res = await fetch("https://cartify-backend-s1hd.onrender.com/api/products/admin", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/products/admin`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
@@ -31,7 +31,7 @@ function AdminDashboard() {
 
   const updateProductStatus = async (id, type) => {
     const res = await fetch(
-      `https://cartify-backend-s1hd.onrender.com/api/products/${id}/${type}`,
+      `${import.meta.env.VITE_API_URL}/api/products/${id}/${type}`,
       {
         method: "PUT",
         headers: {
@@ -47,7 +47,7 @@ function AdminDashboard() {
 
   const fetchOrders = async () => {
     try {
-      const res = await fetch("https://cartify-backend-s1hd.onrender.com/api/orders", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
@@ -70,7 +70,7 @@ function AdminDashboard() {
 
   const updateOrderStatus = async (id, status) => {
     const res = await fetch(
-      `https://cartify-backend-s1hd.onrender.com/api/orders/${id}/status`,
+      `${import.meta.env.VITE_API_URL}/api/orders/${id}/status`,
       {
         method: "PUT",
         headers: {
@@ -98,12 +98,10 @@ function AdminDashboard() {
     <div className="bg-gray-100 min-h-screen px-6 py-8">
       <div className="max-w-5xl mx-auto">
 
-        {/* TITLE */}
         <h1 className="text-3xl font-semibold mb-6">
           Admin Dashboard 👑
         </h1>
 
-        {/* TABS */}
         <div className="flex gap-3 mb-6">
           <button
             onClick={() => setView("products")}
@@ -134,7 +132,7 @@ function AdminDashboard() {
           <p className="text-red-500 mb-4 font-medium">⚠️ {error}</p>
         )}
 
-        {/* ================= PRODUCTS ================= */}
+        {/* PRODUCTS */}
         {view === "products" &&
           (products.length === 0 ? (
             <p>No products found</p>
@@ -147,7 +145,6 @@ function AdminDashboard() {
                   flex justify-between items-start 
                   hover:shadow-xl transition-all duration-300"
                 >
-                  {/* LEFT */}
                   <div>
                     <h2 className="font-semibold text-gray-900">
                       {p.name}
@@ -178,7 +175,6 @@ function AdminDashboard() {
                     </div>
                   </div>
 
-                  {/* RIGHT */}
                   <div className="flex gap-2">
                     {p.status !== "approved" && (
                       <button
@@ -207,7 +203,7 @@ function AdminDashboard() {
             </div>
           ))}
 
-        {/* ================= ORDERS ================= */}
+        {/* ORDERS */}
         {view === "orders" &&
           (orders.length === 0 ? (
             <p>No orders found</p>
@@ -225,7 +221,6 @@ function AdminDashboard() {
 
                   <p className="mt-1">Total: ₹ {o.totalPrice}</p>
 
-                  {/* STATUS */}
                   <div className="mt-2 flex flex-wrap gap-2">
                     <span className="text-xs px-2 py-1 bg-gray-100 rounded-full">
                       {o.status}
@@ -236,7 +231,6 @@ function AdminDashboard() {
                     </span>
                   </div>
 
-                  {/* PRODUCTS */}
                   <div className="mt-3 space-y-1">
                     {o.products.map((item, i) => (
                       <div key={i} className="text-sm text-gray-700">
@@ -245,7 +239,6 @@ function AdminDashboard() {
                     ))}
                   </div>
 
-                  {/* ACTIONS */}
                   <div className="flex gap-2 mt-4">
 
                     {(o.status === "paid" || o.status === "pending") &&
