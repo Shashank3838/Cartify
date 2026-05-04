@@ -109,10 +109,11 @@ function Navbar() {
     }`;
 
   return (
-    <nav className="sticky top-4 z-50 mx-6 rounded-2xl px-8 py-3 flex flex-wrap items-center justify-between gap-3
-      bg-white/70 backdrop-blur-lg border border-gray-200
-      shadow-lg">
+    <nav className="sticky top-4 z-50 mx-4 sm:mx-6 rounded-2xl px-4 sm:px-8 py-3 
+      flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3
+      bg-white/70 backdrop-blur-lg border border-gray-200 shadow-lg">
 
+      {/* LOGO */}
       <h1
         onClick={() => navigate("/")}
         className="text-xl font-semibold tracking-wide cursor-pointer
@@ -121,7 +122,8 @@ function Navbar() {
         Cartify 🛍️
       </h1>
 
-      <div className="flex items-center w-full max-w-[360px] bg-white 
+      {/* SEARCH */}
+      <div className="flex items-center w-full sm:w-[360px] bg-white 
         border border-gray-300 rounded-full px-4 py-1.5 
         focus-within:ring-2 focus-within:ring-gray-400 transition">
 
@@ -142,7 +144,8 @@ function Navbar() {
         </button>
       </div>
 
-      <div className="flex flex-wrap items-center gap-6 text-sm font-medium">
+      {/* LINKS */}
+      <div className="flex flex-wrap items-center gap-3 sm:gap-6 text-sm font-medium w-full sm:w-auto">
 
         <Link to="/" className={linkStyle("/")}>Home</Link>
 
