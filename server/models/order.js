@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
+
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -9,13 +10,20 @@ const orderSchema = new mongoose.Schema({
 
   products: [
     {
+
       product: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product"
       },
 
-      name: String,        // 🔥 snapshot
-      price: Number,       // 🔥 snapshot
+      // 🔥 PRODUCT SNAPSHOT
+      name: String,
+
+      price: Number,
+
+      image: String,
+
+      category: String,
 
       quantity: {
         type: Number,
@@ -29,7 +37,23 @@ const orderSchema = new mongoose.Schema({
     required: true
   },
 
-  // 🔥 ORDER STATUS (UPDATED)
+  // 🔥 SHIPPING
+  shippingAddress: {
+
+    fullName: String,
+
+    phone: String,
+
+    address: String,
+
+    city: String,
+
+    state: String,
+
+    pincode: String
+  },
+
+  // 🔥 ORDER STATUS
   status: {
     type: String,
     enum: [
@@ -38,20 +62,20 @@ const orderSchema = new mongoose.Schema({
       "shipped",
       "delivered",
       "cancelled",
-      "return_requested", // 🔥 NEW
-      "refunded"          // 🔥 NEW
+      "return_requested",
+      "refunded"
     ],
     default: "pending"
   },
 
-  // 🔥 PAYMENT STATUS (UPDATED)
+  // 🔥 PAYMENT STATUS
   paymentStatus: {
     type: String,
     enum: [
       "pending",
       "success",
       "failed",
-      "refunded" // 🔥 NEW (IMPORTANT)
+      "refunded"
     ],
     default: "pending"
   },
@@ -59,8 +83,12 @@ const orderSchema = new mongoose.Schema({
   // 🔥 PAYMENT ID
   paymentId: {
     type: String
-  }
+  },
+
+  deliveredAt: Date
 
 }, { timestamps: true });
 
-module.exports = mongoose.models.Order || mongoose.model("Order", orderSchema);
+module.exports =
+  mongoose.models.Order ||
+  mongoose.model("Order", orderSchema);

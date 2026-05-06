@@ -59,23 +59,31 @@ export const CartProvider = ({ children }) => {
   }, []);
 
   // 🔥 ADD TO CART
-  const addToCart = async (product) => {
+  const addToCart = async (product, quantity = 1) => {
     try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        alert("Please login first");
+        return;
+      }
+
       await fetch(`${import.meta.env.VITE_API_URL}/api/cart`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
+          Authorization: "Bearer " + token,
         },
         body: JSON.stringify({
           productId: product._id,
-          quantity: 1,
+          quantity,
         }),
       });
 
-      fetchCart();
+      await fetchCart();
+
     } catch (err) {
-      console.error(err);
+      console.error("Add to cart error:", err);
     }
   };
 
@@ -90,6 +98,7 @@ export const CartProvider = ({ children }) => {
       });
 
       fetchCart();
+
     } catch (err) {
       console.error(err);
     }
@@ -111,6 +120,7 @@ export const CartProvider = ({ children }) => {
       });
 
       fetchCart();
+
     } catch (err) {
       console.error(err);
     }
@@ -127,6 +137,7 @@ export const CartProvider = ({ children }) => {
       });
 
       fetchCart();
+
     } catch (err) {
       console.error(err);
     }
@@ -139,7 +150,10 @@ export const CartProvider = ({ children }) => {
   );
 
   // 🔥 TOTAL ITEM COUNT
-  const cartCount = cart.reduce((acc, item) => acc + item.qty, 0);
+  const cartCount = cart.reduce(
+    (acc, item) => acc + item.qty,
+    0
+  );
 
   return (
     <CartContext.Provider

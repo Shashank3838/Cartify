@@ -7,13 +7,14 @@ const { authMiddleware, isAdmin } = require("../middleware/authMiddleware");
 // ================= CREATE PRODUCT (SELLER ONLY) =================
 router.post("/", authMiddleware, async (req, res) => {
   try {
-    const { name, price, description, image } = req.body;
+    const { name, price, description, image, category } = req.body;
 
     const product = new Product({
       name,
       price,
       description,
       image,
+      category,
       seller: req.user.id,
       status: "pending"
     });
@@ -75,7 +76,7 @@ router.delete("/:id", authMiddleware, async (req, res) => {
 // ================= UPDATE PRODUCT =================
 router.put("/:id", authMiddleware, async (req, res) => {
   try {
-    const { name, price, description, image } = req.body;
+    const { name, price, description, image, category } = req.body;
 
     const product = await Product.findById(req.params.id);
 
@@ -91,6 +92,7 @@ router.put("/:id", authMiddleware, async (req, res) => {
     product.price = price || product.price;
     product.description = description || product.description;
     product.image = image || product.image;
+    product.category = category || product.category;
 
     product.status = "pending";
 

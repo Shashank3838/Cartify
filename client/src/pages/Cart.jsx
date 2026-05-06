@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { CartContext } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 
@@ -13,6 +13,14 @@ function Cart() {
   } = useContext(CartContext);
 
   const navigate = useNavigate();
+
+  // 🔥 AUTO SCROLL TOP
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
 
   const DELIVERY = cart.length > 0 ? 40 : 0;
   const GRAND_TOTAL = total + DELIVERY;
@@ -55,7 +63,7 @@ function Cart() {
         amount: orderData.amount,
         currency: "INR",
         name: "Cartify",
-        description: "Order Payment",
+        description: "Premium Checkout",
         order_id: orderData.id,
 
         handler: async function (response) {
@@ -69,18 +77,24 @@ function Cart() {
                   Authorization: "Bearer " + token,
                 },
                 body: JSON.stringify({
-                  razorpay_order_id: response.razorpay_order_id,
-                  razorpay_payment_id: response.razorpay_payment_id,
-                  razorpay_signature: response.razorpay_signature,
+                  razorpay_order_id:
+                    response.razorpay_order_id,
+
+                  razorpay_payment_id:
+                    response.razorpay_payment_id,
+
+                  razorpay_signature:
+                    response.razorpay_signature,
+
                   products: cart.map((item) => ({
-                    product: item.product?._id || item._id,
+                    product:
+                      item.product?._id || item._id,
+
                     quantity: item.qty,
                   })),
                 }),
               }
             );
-
-            const verifyData = await verifyRes.json();
 
             if (!verifyRes.ok) {
               alert("Payment verification failed ❌");
@@ -88,7 +102,9 @@ function Cart() {
             }
 
             alert("Payment successful 🎉");
+
             setCart([]);
+
             navigate("/my-orders");
 
           } catch (err) {
@@ -96,10 +112,13 @@ function Cart() {
           }
         },
 
-        theme: { color: "#111827" },
+        theme: {
+          color: "#000000",
+        },
       };
 
       const razor = new window.Razorpay(options);
+
       razor.open();
 
     } catch (err) {
@@ -108,93 +127,318 @@ function Cart() {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen px-6 py-10">
-      <h2 className="text-3xl font-bold mb-8 tracking-wide">
-        🛒 Your Cart
-      </h2>
+    <div
+      className="min-h-screen
+      bg-[#f5f5f7]
+      px-4 sm:px-6 py-10"
+    >
+
+      {/* TITLE */}
+      <div className="max-w-7xl mx-auto mb-12">
+
+        <p
+          className="uppercase tracking-[6px]
+          text-sm text-gray-500 font-semibold mb-4"
+        >
+          Premium Checkout Experience
+        </p>
+
+        <h1
+          className="text-5xl md:text-6xl
+          font-black text-gray-900"
+        >
+          Your Cart 🛒
+        </h1>
+
+        <p
+          className="text-gray-500 mt-4
+          text-lg"
+        >
+          Review your products and complete purchase
+        </p>
+      </div>
 
       {cart.length === 0 ? (
-        <div className="flex flex-col items-center justify-center mt-24 text-gray-500">
-          <p className="text-2xl mb-3">🛍️</p>
-          <p className="text-lg">Your cart is empty</p>
+        <div
+          className="flex flex-col items-center
+          justify-center mt-24 text-gray-500"
+        >
+
+          <div
+            className="w-36 h-36 rounded-full
+            bg-white shadow-2xl
+            flex items-center justify-center
+            text-6xl"
+          >
+            🛍️
+          </div>
+
+          <p className="text-3xl font-bold mt-8">
+            Your cart is empty
+          </p>
+
+          <p className="mt-3 text-lg">
+            Add premium products to continue
+          </p>
+
           <button
             onClick={() => navigate("/")}
-            className="mt-5 px-6 py-2 bg-black text-white rounded-full hover:opacity-90 transition"
+            className="mt-8 px-8 py-4
+            rounded-2xl bg-black text-white
+            font-semibold hover:scale-105
+            transition"
           >
-            Browse Products
+            Browse Products 🚀
           </button>
         </div>
       ) : (
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div
+          className="max-w-7xl mx-auto
+          grid grid-cols-1 lg:grid-cols-3
+          gap-10"
+        >
 
-          <div className="md:col-span-2 space-y-6">
-            {cart.map((item) => (
-              <div
-                key={item._id}
-                className="bg-white rounded-2xl p-5 flex flex-col sm:flex-row gap-5
-                shadow-md hover:shadow-2xl hover:-translate-y-1
-                transition-all duration-300"
-              >
-                <div className="w-full sm:w-28 h-28 bg-gray-50 rounded-xl flex items-center justify-center overflow-hidden">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="object-contain h-full w-full"
-                  />
-                </div>
+          {/* LEFT SIDE */}
+          <div className="lg:col-span-2 space-y-8">
 
-                <div className="flex flex-col flex-grow justify-between">
-                  <div>
-                    <h3 className="font-semibold text-gray-800 text-sm">
-                      {item.name}
-                    </h3>
+            {/* CART ITEMS */}
+            <div className="space-y-6">
 
-                    <p className="text-black font-bold mt-2">
-                      ₹{item.price}
-                    </p>
-                  </div>
+              {cart.map((item) => (
+                <div
+                  key={item._id}
+                  className="group bg-white/80
+                  backdrop-blur-xl rounded-[35px]
+                  p-6 flex flex-col sm:flex-row gap-6
+                  shadow-[0_20px_60px_rgba(0,0,0,0.08)]
+                  border border-white/60
+                  hover:-translate-y-2
+                  hover:shadow-[0_30px_80px_rgba(0,0,0,0.12)]
+                  transition-all duration-500"
+                >
 
-                  <div className="flex items-center gap-3 mt-3">
-                    <button
-                      onClick={() => decreaseQty(item._id)}
-                      className="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center text-lg"
-                    >
-                      −
-                    </button>
-
-                    <span className="font-medium">{item.qty}</span>
-
-                    <button
-                      onClick={() => increaseQty(item._id)}
-                      className="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center text-lg"
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-
-                <div className="flex flex-col justify-between items-start sm:items-end">
-                  <p className="font-bold text-gray-900">
-                    ₹{item.price * item.qty}
-                  </p>
-
-                  <button
-                    onClick={() => removeFromCart(item._id)}
-                    className="text-gray-400 hover:text-red-500 text-sm transition"
+                  {/* IMAGE */}
+                  <div
+                    className="w-full sm:w-36 h-36
+                    rounded-3xl overflow-hidden
+                    bg-gradient-to-br
+                    from-gray-100 to-gray-200"
                   >
-                    ✕ Remove
-                  </button>
+
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-full h-full object-cover
+                      group-hover:scale-110
+                      transition duration-700"
+                    />
+                  </div>
+
+                  {/* CONTENT */}
+                  <div className="flex flex-col flex-grow justify-between">
+
+                    <div>
+                      <h3
+                        className="font-black text-2xl
+                        text-gray-900"
+                      >
+                        {item.name}
+                      </h3>
+
+                      <p
+                        className="text-gray-500
+                        mt-3 leading-7"
+                      >
+                        Premium selected product with
+                        fast delivery and secure payment.
+                      </p>
+
+                      <p
+                        className="text-3xl font-black
+                        mt-5"
+                      >
+                        ₹{item.price}
+                      </p>
+                    </div>
+
+                    {/* QTY */}
+                    <div className="flex items-center gap-4 mt-6">
+
+                      <button
+                        onClick={() =>
+                          decreaseQty(item._id)
+                        }
+                        className="w-12 h-12 rounded-2xl
+                        bg-gray-100 hover:bg-gray-200
+                        text-xl transition"
+                      >
+                        −
+                      </button>
+
+                      <span
+                        className="text-xl font-black"
+                      >
+                        {item.qty}
+                      </span>
+
+                      <button
+                        onClick={() =>
+                          increaseQty(item._id)
+                        }
+                        className="w-12 h-12 rounded-2xl
+                        bg-gray-100 hover:bg-gray-200
+                        text-xl transition"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* RIGHT */}
+                  <div
+                    className="flex flex-col
+                    justify-between items-start sm:items-end"
+                  >
+
+                    <p
+                      className="text-3xl
+                      font-black text-black"
+                    >
+                      ₹{item.price * item.qty}
+                    </p>
+
+                    <button
+                      onClick={() =>
+                        removeFromCart(item._id)
+                      }
+                      className="text-red-500
+                      hover:scale-105 transition"
+                    >
+                      Remove ✕
+                    </button>
+                  </div>
                 </div>
+              ))}
+            </div>
+
+            {/* PAYMENT */}
+            <div
+              className="bg-white/80 backdrop-blur-xl
+              rounded-[35px] p-8
+              shadow-[0_20px_60px_rgba(0,0,0,0.08)]
+              border border-white/60"
+            >
+
+              <h2 className="text-3xl font-black mb-6">
+                Payment Method 💳
+              </h2>
+
+              <div className="grid sm:grid-cols-3 gap-5">
+
+                {[
+                  "💳 Card",
+                  "🏦 UPI",
+                  "💵 Cash",
+                ].map((method, i) => (
+                  <div
+                    key={i}
+                    className="group cursor-pointer
+                    rounded-3xl border border-gray-200
+                    p-6 bg-white
+                    hover:bg-black hover:text-white
+                    hover:-translate-y-2
+                    transition-all duration-500"
+                  >
+
+                    <div className="text-3xl mb-4">
+                      {method.split(" ")[0]}
+                    </div>
+
+                    <h3 className="font-bold text-lg">
+                      {method.split(" ")[1]}
+                    </h3>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
+
+            {/* SHIPPING */}
+            <div
+              className="bg-white/80 backdrop-blur-xl
+              rounded-[35px] p-8
+              shadow-[0_20px_60px_rgba(0,0,0,0.08)]
+              border border-white/60"
+            >
+
+              <h2 className="text-3xl font-black mb-6">
+                Shipping Address 📦
+              </h2>
+
+              <div className="grid sm:grid-cols-2 gap-5">
+
+                <input
+                  type="text"
+                  placeholder="Full Name"
+                  className="border border-gray-200
+                  px-5 py-4 rounded-2xl
+                  outline-none focus:ring-2
+                  focus:ring-black"
+                />
+
+                <input
+                  type="text"
+                  placeholder="Phone Number"
+                  className="border border-gray-200
+                  px-5 py-4 rounded-2xl
+                  outline-none focus:ring-2
+                  focus:ring-black"
+                />
+
+                <input
+                  type="text"
+                  placeholder="City"
+                  className="border border-gray-200
+                  px-5 py-4 rounded-2xl
+                  outline-none focus:ring-2
+                  focus:ring-black"
+                />
+
+                <input
+                  type="text"
+                  placeholder="Pincode"
+                  className="border border-gray-200
+                  px-5 py-4 rounded-2xl
+                  outline-none focus:ring-2
+                  focus:ring-black"
+                />
+
+                <textarea
+                  placeholder="Full Address"
+                  rows={4}
+                  className="sm:col-span-2
+                  border border-gray-200
+                  px-5 py-4 rounded-2xl
+                  outline-none focus:ring-2
+                  focus:ring-black resize-none"
+                />
+              </div>
+            </div>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-lg p-6 h-fit sticky top-24">
-            <h3 className="text-lg font-semibold mb-5">
-              Order Summary
-            </h3>
+          {/* RIGHT SUMMARY */}
+          <div
+            className="bg-white/80 backdrop-blur-xl
+            rounded-[35px] p-8 h-fit sticky top-28
+            shadow-[0_20px_60px_rgba(0,0,0,0.08)]
+            border border-white/60"
+          >
 
-            <div className="space-y-3 text-gray-600 text-sm">
+            <h2 className="text-3xl font-black mb-8">
+              Order Summary ✨
+            </h2>
+
+            <div className="space-y-5 text-gray-600">
+
               <div className="flex justify-between">
                 <span>Items</span>
                 <span>{cart.length}</span>
@@ -209,24 +453,91 @@ function Cart() {
                 <span>Delivery</span>
                 <span>₹{DELIVERY}</span>
               </div>
+
+              <div className="flex justify-between">
+                <span>Discount</span>
+                <span className="text-green-600">
+                  − ₹120
+                </span>
+              </div>
             </div>
 
-            <hr className="my-5" />
+            <hr className="my-8" />
 
-            <div className="flex justify-between font-bold text-lg mb-6">
-              <span>Grand Total</span>
-              <span>₹{GRAND_TOTAL}</span>
+            <div
+              className="flex justify-between
+              items-center"
+            >
+
+              <div>
+                <p className="text-gray-500">
+                  Grand Total
+                </p>
+
+                <h3
+                  className="text-4xl font-black
+                  text-black"
+                >
+                  ₹{GRAND_TOTAL - 120}
+                </h3>
+              </div>
+
+              <div
+                className="bg-green-100 text-green-700
+                px-4 py-2 rounded-full
+                text-sm font-bold"
+              >
+                SAVED ₹120
+              </div>
             </div>
 
+            {/* PAY BUTTON */}
             <button
               onClick={handleCheckout}
-              className="w-full py-3 rounded-xl
-              bg-black text-white font-medium tracking-wide
-              hover:bg-gray-900 hover:shadow-xl hover:scale-[1.02]
-              active:scale-95 transition-all duration-200"
+              className="group relative overflow-hidden
+              mt-10 w-full py-5 rounded-3xl
+              bg-black text-white
+              font-black text-lg
+              hover:scale-[1.02]
+              active:scale-95
+              transition-all duration-300
+              shadow-[0_20px_50px_rgba(0,0,0,0.3)]"
             >
-              Proceed to Pay 💳
+
+              <div
+                className="absolute inset-0
+                bg-gradient-to-r
+                from-gray-800 to-black
+                opacity-0 group-hover:opacity-100
+                transition duration-500"
+              />
+
+              <span className="relative z-10">
+                Complete Secure Payment 💳
+              </span>
             </button>
+
+            {/* SECURITY */}
+            <div className="mt-8 space-y-4">
+
+              {[
+                "🔒 100% Secure Payment",
+                "🚚 Fast Delivery",
+                "↩️ Easy Returns",
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-3
+                  text-gray-600"
+                >
+                  <span>{item.split(" ")[0]}</span>
+
+                  <span>
+                    {item.replace(item.split(" ")[0], "")}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}

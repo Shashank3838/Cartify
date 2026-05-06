@@ -13,6 +13,13 @@ const productSchema = new mongoose.Schema({
 
   description: String,
 
+  // 🔥 CATEGORY
+  category: {
+    type: String,
+    enum: ["Electronics", "Fashion", "Food", "Toys", "Other"],
+    default: "Other"
+  },
+
   // seller reference
   seller: {
     type: mongoose.Schema.Types.ObjectId,
