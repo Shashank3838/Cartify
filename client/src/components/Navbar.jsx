@@ -11,7 +11,6 @@ function Navbar() {
   const [allProducts, setAllProducts] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
 
-  // 🔥 CART DRAWER
   const [showCartDrawer, setShowCartDrawer] = useState(false);
 
   const {
@@ -36,10 +35,11 @@ function Navbar() {
     };
 
     window.addEventListener("storage", syncAuth);
+
     return () => window.removeEventListener("storage", syncAuth);
   }, []);
 
-  // 🔥 FETCH USER
+  // FETCH USER
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -83,7 +83,7 @@ function Navbar() {
     }
   }, [isLoggedIn]);
 
-  // 🔥 FETCH PRODUCTS
+  // FETCH PRODUCTS
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/api/products`)
       .then((res) => res.json())
@@ -93,7 +93,7 @@ function Navbar() {
       .catch((err) => console.error(err));
   }, []);
 
-  // 🔥 LIVE SEARCH
+  // LIVE SEARCH
   useEffect(() => {
     if (!search.trim()) {
       setSuggestions([]);
@@ -104,7 +104,7 @@ function Navbar() {
       .filter((p) =>
         p.name.toLowerCase().includes(search.toLowerCase())
       )
-      .slice(0, 5);
+      .slice(0, 6);
 
     setSuggestions(filtered);
   }, [search, allProducts]);
@@ -134,9 +134,9 @@ function Navbar() {
 
       const data = await res.json();
 
-      alert(data.message);
-
       setRole("seller");
+
+      alert(data.message);
     } catch (err) {
       console.error(err);
     }
@@ -165,7 +165,8 @@ function Navbar() {
   };
 
   const linkStyle = (path) =>
-    `relative group px-3 py-1 transition-all duration-300 ${
+    `relative px-1 py-1 text-[15px] font-medium transition-all duration-300
+    ${
       location.pathname === path
         ? "text-black"
         : "text-gray-600 hover:text-black"
@@ -175,233 +176,439 @@ function Navbar() {
     <>
       {/* NAVBAR */}
       <nav
-        className="sticky top-4 z-50 mx-4 sm:mx-6 rounded-2xl px-4 sm:px-8 py-3
-        flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3
-        bg-white/70 backdrop-blur-lg border border-gray-200 shadow-lg"
+        className="
+        sticky top-4 z-50
+        mx-4 lg:mx-8
+        rounded-[28px]
+        border border-white/40
+        bg-white/75
+        backdrop-blur-2xl
+        shadow-[0_10px_40px_rgba(0,0,0,0.08)]
+        px-5 lg:px-8
+        py-4
+        transition-all duration-500
+      "
       >
-        {/* LOGO */}
-        <h1
-          onClick={() => navigate("/")}
-          className="text-xl font-semibold tracking-wide cursor-pointer
-          text-black hover:opacity-70 transition"
-        >
-          Cartify 🛍️
-        </h1>
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-5">
 
-        {/* SEARCH */}
-        <div className="relative w-full sm:w-[360px]">
+          {/* LEFT */}
+          <div className="flex items-center gap-10 w-full lg:w-auto">
+
+            {/* LOGO */}
+            <div
+              onClick={() => navigate("/")}
+              className="group flex items-center gap-3 cursor-pointer"
+            >
+              <div
+                className="
+                w-11 h-11 rounded-2xl
+                bg-gradient-to-br from-black to-gray-800
+                text-white
+                flex items-center justify-center
+                text-lg
+                shadow-lg
+                group-hover:scale-110
+                transition-all duration-300
+              "
+              >
+                🛍️
+              </div>
+
+              <div>
+                <h1
+                  className="
+                  text-2xl font-black tracking-tight
+                  bg-gradient-to-r from-black to-gray-600
+                  bg-clip-text text-transparent
+                "
+                >
+                  Cartify
+                </h1>
+
+                <p className="text-[11px] text-gray-500 -mt-1 tracking-widest">
+                  PREMIUM STORE
+                </p>
+              </div>
+            </div>
+
+            {/* SEARCH */}
+            <div className="hidden md:block relative w-[380px]">
+
+              <div
+                className="
+                flex items-center gap-3
+                bg-white/90
+                border border-gray-200
+                rounded-full
+                px-5 py-3
+                shadow-sm
+                focus-within:shadow-xl
+                focus-within:scale-[1.02]
+                focus-within:border-gray-400
+                transition-all duration-300
+              "
+              >
+                <span className="text-lg">🔍</span>
+
+                <input
+                  type="text"
+                  placeholder="Search premium products..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  className="
+                  bg-transparent outline-none w-full
+                  text-sm text-black
+                  placeholder:text-gray-400
+                "
+                />
+
+                {search && (
+                  <button
+                    onClick={() => {
+                      setSearch("");
+                      setSuggestions([]);
+                    }}
+                    className="
+                    text-gray-400 hover:text-black
+                    transition
+                  "
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+
+              {/* SUGGESTIONS */}
+              {suggestions.length > 0 && (
+                <div
+                  className="
+                  absolute top-16 left-0 w-full
+                  bg-white/95 backdrop-blur-xl
+                  rounded-3xl
+                  border border-gray-200
+                  shadow-2xl
+                  overflow-hidden
+                  z-50
+                "
+                >
+                  {suggestions.map((item) => (
+                    <button
+                      key={item._id}
+                      onClick={() =>
+                        handleSuggestionClick(item.name)
+                      }
+                      className="
+                      w-full text-left px-5 py-4
+                      hover:bg-gray-100/80
+                      transition-all duration-200
+                      flex items-center gap-4
+                    "
+                    >
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="
+                        w-14 h-14 rounded-2xl
+                        object-cover
+                        shadow-md
+                      "
+                      />
+
+                      <div className="flex-1">
+                        <p className="font-semibold text-gray-800">
+                          {item.name}
+                        </p>
+
+                        <p className="text-sm text-gray-500">
+                          ₹{item.price}
+                        </p>
+                      </div>
+
+                      <span className="text-gray-400">
+                        ↗
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* RIGHT */}
+          <div
+            className="
+            flex flex-wrap items-center justify-center
+            gap-6 text-sm
+          "
+          >
+
+            <Link to="/" className={linkStyle("/")}>
+              <span className="hover:-translate-y-[2px] transition inline-block">
+                Home
+              </span>
+            </Link>
+
+            {/* CART */}
+            <button
+              onClick={() => setShowCartDrawer(true)}
+              className={linkStyle("/cart")}
+            >
+              Cart
+              {cartCount > 0 && (
+                <span className="ml-1">
+                  ({cartCount})
+                </span>
+              )}
+            </button>
+
+            {!isLoggedIn ? (
+              <>
+                <Link to="/login" className={linkStyle("/login")}>
+                  Login
+                </Link>
+
+                <Link
+                  to="/register"
+                  className="
+                  px-5 py-2.5 rounded-full
+                  bg-gradient-to-r from-black to-gray-800
+                  text-white font-semibold
+                  shadow-lg shadow-black/20
+                  hover:scale-105
+                  hover:shadow-xl
+                  transition-all duration-300
+                "
+                >
+                  Register
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/my-orders"
+                  className={linkStyle("/my-orders")}
+                >
+                  Orders
+                </Link>
+
+                <Link
+                  to="/wishlist"
+                  className={linkStyle("/wishlist")}
+                >
+                  Wishlist
+                </Link>
+
+                {!loading && role && (
+                  <>
+                    {role === "user" && (
+                      <button
+                        onClick={becomeSeller}
+                        className="
+                        px-4 py-2 rounded-full
+                        bg-gradient-to-r from-gray-100 to-gray-200
+                        hover:from-black hover:to-gray-800
+                        hover:text-white
+                        transition-all duration-300
+                      "
+                      >
+                        Become Seller
+                      </button>
+                    )}
+
+                    {role === "seller" && (
+                      <Link
+                        to="/seller"
+                        className={linkStyle("/seller")}
+                      >
+                        Seller
+                      </Link>
+                    )}
+
+                    {role === "admin" && (
+                      <>
+                        <Link
+                          to="/seller"
+                          className={linkStyle("/seller")}
+                        >
+                          Seller
+                        </Link>
+
+                        <Link
+                          to="/admin"
+                          className={linkStyle("/admin")}
+                        >
+                          Admin
+                        </Link>
+                      </>
+                    )}
+                  </>
+                )}
+
+                <button
+                  onClick={handleLogout}
+                  className="
+                  px-5 py-2 rounded-full
+                  bg-red-500 text-white
+                  hover:bg-red-600
+                  hover:scale-105
+                  shadow-lg
+                  transition-all duration-300
+                "
+                >
+                  Logout
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* MOBILE SEARCH */}
+        <div className="md:hidden mt-4 relative">
 
           <div
-            className="flex items-center bg-white
-            border border-gray-300 rounded-full px-4 py-1.5
-            focus-within:ring-2 focus-within:ring-gray-400 transition"
+            className="
+            flex items-center gap-3
+            bg-white border border-gray-200
+            rounded-full px-4 py-3
+          "
           >
+            <span>🔍</span>
+
             <input
               type="text"
               placeholder="Search products..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="bg-transparent outline-none text-black px-2 w-full placeholder-gray-500 text-sm"
+              className="
+              bg-transparent outline-none
+              w-full text-sm
+            "
             />
-
-            <button
-              onClick={handleSearch}
-              className="text-gray-600 hover:text-black transition"
-            >
-              🔍
-            </button>
           </div>
-
-          {/* SUGGESTIONS */}
-          {suggestions.length > 0 && (
-            <div
-              className="absolute top-14 left-0 w-full bg-white rounded-2xl
-              shadow-2xl border border-gray-200 overflow-hidden z-50"
-            >
-              {suggestions.map((item) => (
-                <button
-                  key={item._id}
-                  onClick={() => handleSuggestionClick(item.name)}
-                  className="w-full text-left px-4 py-3 hover:bg-gray-100
-                  transition flex items-center gap-3"
-                >
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-10 h-10 rounded-lg object-cover"
-                  />
-
-                  <div>
-                    <p className="text-sm font-medium text-gray-800">
-                      {item.name}
-                    </p>
-
-                    <p className="text-xs text-gray-500">
-                      ₹{item.price}
-                    </p>
-                  </div>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* LINKS */}
-        <div className="flex flex-wrap items-center gap-3 sm:gap-6 text-sm font-medium w-full sm:w-auto">
-
-          <Link to="/" className={linkStyle("/")}>
-            Home
-          </Link>
-
-          {/* 🔥 CART BUTTON */}
-          <button
-            onClick={() => setShowCartDrawer(true)}
-            className="relative"
-          >
-            <span className={linkStyle("/cart")}>
-              Cart 🛒
-            </span>
-
-            {cartCount > 0 && (
-              <span
-                className="absolute -top-2 -right-3 bg-black text-white
-                text-[10px] px-2 py-[2px] rounded-full"
-              >
-                {cartCount}
-              </span>
-            )}
-          </button>
-
-          {!isLoggedIn ? (
-            <>
-              <Link to="/login" className={linkStyle("/login")}>
-                Login
-              </Link>
-
-              <Link
-                to="/register"
-                className="px-4 py-1.5 rounded-full bg-black text-white"
-              >
-                Register
-              </Link>
-            </>
-          ) : (
-            <>
-              <Link
-                to="/my-orders"
-                className={linkStyle("/my-orders")}
-              >
-                Orders 📦
-              </Link>
-
-              <Link to="/wishlist">
-                Wishlist ❤️
-              </Link>
-
-              {!loading && role && (
-                <>
-                  {role === "user" && (
-                    <button onClick={becomeSeller}>
-                      Become Seller 🚀
-                    </button>
-                  )}
-
-                  {role === "seller" && (
-                    <Link to="/seller">
-                      Seller Dashboard 📦
-                    </Link>
-                  )}
-
-                  {role === "admin" && (
-                    <>
-                      <Link to="/seller">
-                        Seller Dashboard 📦
-                      </Link>
-
-                      <Link to="/admin">
-                        Admin Dashboard 👑
-                      </Link>
-                    </>
-                  )}
-                </>
-              )}
-
-              <button
-                onClick={handleLogout}
-                className="bg-red-500 text-white px-4 py-1.5 rounded"
-              >
-                Logout
-              </button>
-            </>
-          )}
         </div>
       </nav>
 
-      {/* 🔥 BACKDROP */}
+      {/* BACKDROP */}
       {showCartDrawer && (
         <div
           onClick={() => setShowCartDrawer(false)}
-          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
+          className="
+          fixed inset-0 z-40
+          bg-black/40
+          backdrop-blur-sm
+        "
         />
       )}
 
-      {/* 🔥 CART DRAWER */}
+      {/* CART DRAWER */}
       <div
-        className={`fixed top-0 right-0 h-full w-[380px]
-        bg-white z-50 shadow-2xl transition-transform duration-500
+        className={`
+        fixed top-0 right-0 h-full
+        w-[390px]
+        bg-white/95 backdrop-blur-2xl
+        z-50
+        border-l border-gray-200
+        shadow-[0_0_40px_rgba(0,0,0,0.15)]
+        transition-transform duration-500
         flex flex-col
-        ${showCartDrawer ? "translate-x-0" : "translate-x-full"}`}
+        ${showCartDrawer ? "translate-x-0" : "translate-x-full"}
+      `}
       >
+
         {/* HEADER */}
-        <div className="flex items-center justify-between p-6 border-b">
-          <h2 className="text-xl font-bold">
-            Your Cart 🛒
-          </h2>
+        <div
+          className="
+          flex items-center justify-between
+          p-6 border-b border-gray-200
+        "
+        >
+          <div>
+            <h2 className="text-2xl font-black text-black">
+              Your Cart
+            </h2>
+
+            <p className="text-sm text-gray-500 mt-1">
+              Premium shopping experience
+            </p>
+          </div>
 
           <button
             onClick={() => setShowCartDrawer(false)}
-            className="text-2xl text-gray-500 hover:text-black"
+            className="
+            w-10 h-10 rounded-full
+            bg-gray-100
+            hover:bg-black hover:text-white
+            transition-all duration-300
+          "
           >
             ✕
           </button>
         </div>
 
-        {/* CART ITEMS */}
+        {/* ITEMS */}
         <div className="flex-1 overflow-y-auto p-5 space-y-4">
 
           {cart.length === 0 ? (
-            <div className="text-center mt-20 text-gray-500">
-              Your cart is empty 🛍️
+            <div className="text-center mt-24">
+              <div className="text-6xl mb-5">
+                🛍️
+              </div>
+
+              <h3 className="text-xl font-bold text-gray-800">
+                Cart is Empty
+              </h3>
+
+              <p className="text-gray-500 mt-2 text-sm">
+                Add premium products to continue
+              </p>
             </div>
           ) : (
             cart.map((item) => (
               <div
                 key={item._id}
-                className="flex gap-4 bg-gray-50 rounded-2xl p-3"
+                className="
+                flex gap-4
+                bg-gradient-to-br from-gray-50 to-white
+                border border-gray-100
+                rounded-3xl
+                p-4
+                hover:shadow-xl
+                hover:-translate-y-1
+                transition-all duration-300
+              "
               >
                 <img
                   src={item.image}
                   alt={item.name}
-                  className="w-20 h-20 object-cover rounded-xl"
+                  className="
+                  w-24 h-24 rounded-2xl
+                  object-cover
+                  shadow-md
+                "
                 />
 
                 <div className="flex-1">
-                  <h3 className="font-medium text-sm">
+                  <h3 className="font-semibold text-gray-800">
                     {item.name}
                   </h3>
 
-                  <p className="font-bold mt-1">
+                  <p className="font-black text-lg mt-1">
                     ₹{item.price}
                   </p>
 
                   <p className="text-xs text-gray-500 mt-1">
-                    Qty: {item.qty}
+                    Quantity: {item.qty}
                   </p>
 
                   <button
                     onClick={() => removeFromCart(item._id)}
-                    className="text-red-500 text-xs mt-2"
+                    className="
+                    mt-3 text-red-500 text-sm
+                    hover:text-red-600
+                    transition
+                  "
                   >
                     Remove
                   </button>
@@ -412,13 +619,19 @@ function Navbar() {
         </div>
 
         {/* FOOTER */}
-        <div className="border-t p-5">
-          <div className="flex justify-between mb-4">
-            <span className="font-medium">
+        <div
+          className="
+          border-t border-gray-200
+          p-6
+          bg-white/90
+        "
+        >
+          <div className="flex items-center justify-between mb-5">
+            <span className="text-gray-500">
               Total
             </span>
 
-            <span className="font-bold">
+            <span className="text-3xl font-black text-black">
               ₹{total}
             </span>
           </div>
@@ -428,10 +641,16 @@ function Navbar() {
               setShowCartDrawer(false);
               navigate("/cart");
             }}
-            className="w-full bg-black text-white py-3 rounded-xl
-            hover:opacity-90 transition"
+            className="
+            w-full py-4 rounded-2xl
+            bg-gradient-to-r from-black to-gray-800
+            text-white font-semibold text-lg
+            shadow-xl shadow-black/20
+            hover:scale-[1.02]
+            transition-all duration-300
+          "
           >
-            Open Full Cart
+            Open Full Cart →
           </button>
         </div>
       </div>
