@@ -2,6 +2,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import { useState } from "react";
 
+import { Toaster } from "react-hot-toast";
+
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Cart from "./pages/Cart";
@@ -85,6 +87,45 @@ function App() {
 
   return (
     <Router>
+
+      {/* 🔥 PREMIUM TOASTER */}
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+
+        toastOptions={{
+          duration: 2500,
+
+          style: {
+            background: "#0f172a",
+            color: "#fff",
+            borderRadius: "18px",
+            padding: "16px 20px",
+            border:
+              "1px solid rgba(255,255,255,0.08)",
+
+            boxShadow:
+              "0 10px 40px rgba(0,0,0,0.25)",
+
+            fontWeight: "600",
+          },
+
+          success: {
+            iconTheme: {
+              primary: "#22c55e",
+              secondary: "#fff",
+            },
+          },
+
+          error: {
+            iconTheme: {
+              primary: "#ef4444",
+              secondary: "#fff",
+            },
+          },
+        }}
+      />
+
       <div className="min-h-screen bg-[#f5f7fb] flex flex-col">
 
         <Navbar />
@@ -93,8 +134,16 @@ function App() {
         <div className="flex-1">
 
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/cart" element={<Cart />} />
+
+            <Route
+              path="/"
+              element={<Home />}
+            />
+
+            <Route
+              path="/cart"
+              element={<Cart />}
+            />
 
             {/* PRODUCT DETAIL */}
             <Route
@@ -109,7 +158,10 @@ function App() {
             />
 
             {/* AUTH */}
-            <Route path="/login" element={<Login />} />
+            <Route
+              path="/login"
+              element={<Login />}
+            />
 
             <Route
               path="/register"
@@ -133,30 +185,48 @@ function App() {
               path="/my-orders"
               element={<MyOrders />}
             />
+
           </Routes>
         </div>
 
         {/* 🔥 PREMIUM FOOTER */}
-        <footer className="bg-black text-white mt-20">
+        <footer
+          className="
+          mt-20
+          bg-black/95
+          backdrop-blur-2xl
+          text-white
+          border-t border-white/10
+        "
+        >
 
           {/* TOP */}
           <div
-            className="max-w-7xl mx-auto
+            className="
+            max-w-7xl mx-auto
             px-6 py-16
-            grid md:grid-cols-4 gap-10"
+            grid md:grid-cols-4 gap-10
+          "
           >
 
             {/* BRAND */}
             <div>
 
               <h1
-                className="text-3xl font-extrabold mb-4"
+                className="
+                text-3xl font-extrabold mb-4
+                bg-gradient-to-r
+                from-white to-gray-400
+                bg-clip-text text-transparent
+              "
               >
                 Cartify 🛍️
               </h1>
 
               <p
-                className="text-gray-400 leading-7"
+                className="
+                text-gray-400 leading-7
+              "
               >
                 Premium multi-vendor ecommerce
                 platform built for modern shopping
@@ -164,36 +234,28 @@ function App() {
               </p>
 
               <div
-                className="flex gap-4 mt-6 text-2xl"
+                className="
+                flex gap-4 mt-6 text-2xl
+              "
               >
 
-                <span
-                  className="cursor-pointer
-                  hover:scale-110 transition"
-                >
-                  📸
-                </span>
+                {["📸", "🐦", "💼", "▶️"].map(
+                  (icon, i) => (
 
-                <span
-                  className="cursor-pointer
-                  hover:scale-110 transition"
-                >
-                  🐦
-                </span>
+                    <span
+                      key={i}
 
-                <span
-                  className="cursor-pointer
-                  hover:scale-110 transition"
-                >
-                  💼
-                </span>
-
-                <span
-                  className="cursor-pointer
-                  hover:scale-110 transition"
-                >
-                  ▶️
-                </span>
+                      className="
+                      cursor-pointer
+                      hover:scale-110
+                      hover:-translate-y-1
+                      transition-all duration-300
+                    "
+                    >
+                      {icon}
+                    </span>
+                  )
+                )}
               </div>
             </div>
 
@@ -201,42 +263,39 @@ function App() {
             <div>
 
               <h2
-                className="text-xl font-bold mb-5"
+                className="
+                text-xl font-bold mb-5
+              "
               >
                 Shop
               </h2>
 
               <ul
-                className="space-y-3 text-gray-400"
+                className="
+                space-y-3 text-gray-400
+              "
               >
 
-                <li
-                  className="hover:text-white
-                  cursor-pointer transition"
-                >
-                  Trending Products
-                </li>
+                {[
+                  "Trending Products",
+                  "New Arrivals",
+                  "Featured Picks",
+                  "Best Sellers",
+                ].map((item, i) => (
 
-                <li
-                  className="hover:text-white
-                  cursor-pointer transition"
-                >
-                  New Arrivals
-                </li>
+                  <li
+                    key={i}
 
-                <li
-                  className="hover:text-white
-                  cursor-pointer transition"
-                >
-                  Featured Picks
-                </li>
-
-                <li
-                  className="hover:text-white
-                  cursor-pointer transition"
-                >
-                  Best Sellers
-                </li>
+                    className="
+                    hover:text-white
+                    hover:translate-x-1
+                    cursor-pointer
+                    transition-all duration-300
+                  "
+                  >
+                    {item}
+                  </li>
+                ))}
               </ul>
             </div>
 
@@ -244,42 +303,39 @@ function App() {
             <div>
 
               <h2
-                className="text-xl font-bold mb-5"
+                className="
+                text-xl font-bold mb-5
+              "
               >
                 Company
               </h2>
 
               <ul
-                className="space-y-3 text-gray-400"
+                className="
+                space-y-3 text-gray-400
+              "
               >
 
-                <li
-                  className="hover:text-white
-                  cursor-pointer transition"
-                >
-                  About Us
-                </li>
+                {[
+                  "About Us",
+                  "Careers",
+                  "Privacy Policy",
+                  "Terms & Conditions",
+                ].map((item, i) => (
 
-                <li
-                  className="hover:text-white
-                  cursor-pointer transition"
-                >
-                  Careers
-                </li>
+                  <li
+                    key={i}
 
-                <li
-                  className="hover:text-white
-                  cursor-pointer transition"
-                >
-                  Privacy Policy
-                </li>
-
-                <li
-                  className="hover:text-white
-                  cursor-pointer transition"
-                >
-                  Terms & Conditions
-                </li>
+                    className="
+                    hover:text-white
+                    hover:translate-x-1
+                    cursor-pointer
+                    transition-all duration-300
+                  "
+                  >
+                    {item}
+                  </li>
+                ))}
               </ul>
             </div>
 
@@ -287,12 +343,18 @@ function App() {
             <div>
 
               <h2
-                className="text-xl font-bold mb-5"
+                className="
+                text-xl font-bold mb-5
+              "
               >
                 Stay Updated ✨
               </h2>
 
-              <p className="text-gray-400 mb-5">
+              <p
+                className="
+                text-gray-400 mb-5
+              "
+              >
                 Get latest product drops and premium
                 deals directly in your inbox.
               </p>
@@ -301,17 +363,36 @@ function App() {
 
                 <input
                   type="email"
+
                   placeholder="Enter your email"
-                  className="px-4 py-3 rounded-xl
-                  bg-[#111]
+
+                  className="
+                  px-4 py-3 rounded-xl
+
+                  bg-[#111827]
+
                   border border-gray-700
-                  outline-none focus:border-white"
+
+                  outline-none
+
+                  focus:border-white
+
+                  transition-all duration-300
+                "
                 />
 
                 <button
-                  className="bg-white text-black
-                  py-3 rounded-xl font-semibold
-                  hover:scale-[1.02] transition"
+                  className="
+                  bg-white text-black
+
+                  py-3 rounded-xl
+                  font-semibold
+
+                  hover:scale-[1.02]
+                  hover:shadow-[0_15px_40px_rgba(255,255,255,0.15)]
+
+                  transition-all duration-300
+                "
                 >
                   Subscribe 🚀
                 </button>
@@ -321,15 +402,24 @@ function App() {
 
           {/* BOTTOM */}
           <div
-            className="border-t border-gray-800
-            py-6 px-6"
+            className="
+            border-t border-gray-800
+            py-6 px-6
+          "
           >
 
             <div
-              className="max-w-7xl mx-auto
+              className="
+              max-w-7xl mx-auto
+
               flex flex-col md:flex-row
+
               justify-between items-center
-              gap-4 text-gray-500 text-sm"
+
+              gap-4
+
+              text-gray-500 text-sm
+            "
             >
 
               <p>
@@ -338,26 +428,24 @@ function App() {
 
               <div className="flex gap-6">
 
-                <span
-                  className="hover:text-white
-                  cursor-pointer transition"
-                >
-                  Privacy
-                </span>
+                {[
+                  "Privacy",
+                  "Terms",
+                  "Support",
+                ].map((item, i) => (
 
-                <span
-                  className="hover:text-white
-                  cursor-pointer transition"
-                >
-                  Terms
-                </span>
+                  <span
+                    key={i}
 
-                <span
-                  className="hover:text-white
-                  cursor-pointer transition"
-                >
-                  Support
-                </span>
+                    className="
+                    hover:text-white
+                    cursor-pointer
+                    transition-all duration-300
+                  "
+                  >
+                    {item}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
@@ -365,51 +453,116 @@ function App() {
 
         {/* 🔥 AI ORB BUTTON */}
         <button
-          onClick={() => setShowAI(!showAI)}
-          className="fixed bottom-6 right-6
+          onClick={() =>
+            setShowAI(!showAI)
+          }
+
+          className="
+          fixed bottom-6 right-6
+
           w-20 h-20 rounded-full
-          bg-black text-white
-          text-3xl shadow-[0_0_40px_rgba(0,0,0,0.5)]
+
+          bg-gradient-to-br
+          from-black to-gray-800
+
+          text-white text-3xl
+
+          shadow-[0_0_50px_rgba(0,0,0,0.5)]
+
           hover:scale-110
+          hover:rotate-6
+
           transition-all duration-500
-          z-50 animate-pulse"
+
+          z-50
+
+          animate-pulse
+        "
         >
-          ✨
+
+          <div
+            className="
+            absolute inset-0 rounded-full
+
+            border border-white/20
+
+            animate-spin
+          "
+            style={{
+              animationDuration: "6s",
+            }}
+          />
+
+          <span className="relative z-10">
+            ✨
+          </span>
         </button>
 
         {/* 🔥 AI PANEL */}
         {showAI && (
+
           <div
-            className="fixed bottom-32 right-6
+            className="
+            fixed bottom-32 right-6
+
             w-[360px] h-[520px]
+
             bg-white/90 backdrop-blur-2xl
+
             border border-white/60
+
             rounded-[35px]
+
             shadow-[0_20px_80px_rgba(0,0,0,0.2)]
+
             flex flex-col overflow-hidden
-            z-50"
+
+            z-50
+
+            animate-[fadeIn_.3s_ease]
+          "
           >
 
             {/* HEADER */}
             <div
-              className="bg-black text-white
-              p-5 flex items-center justify-between"
+              className="
+              bg-black text-white
+
+              p-5
+
+              flex items-center justify-between
+            "
             >
 
               <div>
 
-                <h2 className="font-black text-xl">
+                <h2
+                  className="
+                  font-black text-xl
+                "
+                >
                   Cartify AI ✨
                 </h2>
 
-                <p className="text-sm text-gray-300">
+                <p
+                  className="
+                  text-sm text-gray-300
+                "
+                >
                   Premium Shopping Assistant
                 </p>
               </div>
 
               <button
-                onClick={() => setShowAI(false)}
-                className="text-2xl"
+                onClick={() =>
+                  setShowAI(false)
+                }
+
+                className="
+                text-2xl
+                hover:rotate-90
+                transition duration-300
+              "
               >
                 ×
               </button>
@@ -417,19 +570,40 @@ function App() {
 
             {/* CHAT */}
             <div
-              className="flex-1 overflow-y-auto
-              p-5 space-y-4"
+              className="
+              flex-1 overflow-y-auto
+
+              p-5 space-y-4
+            "
             >
 
               {messages.map((msg, i) => (
+
                 <div
                   key={i}
-                  className={`max-w-[85%] p-4 rounded-3xl text-sm leading-7
-                    ${
-                      msg.role === "user"
-                        ? "bg-black text-white ml-auto"
-                        : "bg-gray-100 text-gray-800"
-                    }`}
+
+                  className={`
+                  max-w-[85%]
+
+                  p-4 rounded-3xl
+
+                  text-sm leading-7
+
+                  shadow-lg
+
+                  ${
+                    msg.role === "user"
+
+                      ? `
+                        bg-black text-white
+                        ml-auto
+                      `
+
+                      : `
+                        bg-gray-100 text-gray-800
+                      `
+                  }
+                `}
                 >
                   {msg.text}
                 </div>
@@ -438,33 +612,56 @@ function App() {
 
             {/* INPUT */}
             <div
-              className="p-4 border-t
-              flex gap-3"
+              className="
+              p-4 border-t
+
+              flex gap-3
+            "
             >
 
               <input
                 type="text"
+
                 value={input}
+
                 onChange={(e) =>
                   setInput(e.target.value)
                 }
+
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     handleAI();
                   }
                 }}
+
                 placeholder="Ask Cartify AI..."
-                className="flex-1 px-4 py-3
+
+                className="
+                flex-1 px-4 py-3
+
                 rounded-2xl border
-                outline-none focus:ring-2
-                focus:ring-black"
+
+                outline-none
+
+                focus:ring-2
+                focus:ring-black
+
+                transition-all duration-300
+              "
               />
 
               <button
                 onClick={handleAI}
-                className="px-5 rounded-2xl
+
+                className="
+                px-5 rounded-2xl
+
                 bg-black text-white
-                hover:scale-105 transition"
+
+                hover:scale-105
+
+                transition-all duration-300
+              "
               >
                 ➤
               </button>

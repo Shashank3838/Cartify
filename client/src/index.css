@@ -1,3 +1,63 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* 🔥 GLOBAL SMOOTHNESS */
+html {
+  scroll-behavior: smooth;
+}
+
+/* 🔥 PREMIUM BODY */
+body {
+  background: #f5f7fb;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  text-rendering: optimizeLegibility;
+
+  overflow-x: hidden;
+}
+
+/* 🔥 SMOOTH TRANSITIONS */
+* {
+  box-sizing: border-box;
+}
+
+/* 🔥 BETTER SCROLLBAR */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f3f7;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c7ced9;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #aab4c3;
+}
+
+/* 🔥 REMOVE BLUE TAP HIGHLIGHT */
+button,
+a,
+input,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 🔥 IMAGE OPTIMIZATION */
+img {
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* 🔥 PREMIUM SELECTION */
+::selection {
+  background: black;
+  color: white;
+}

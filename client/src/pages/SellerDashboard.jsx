@@ -26,9 +26,7 @@ function SellerDashboard() {
     revenue: 0,
   });
 
-  // =====================================
   // FETCH PRODUCTS
-  // =====================================
   const fetchMyProducts = async () => {
 
     const res = await fetch(
@@ -71,9 +69,7 @@ function SellerDashboard() {
     fetchMyProducts();
   }, []);
 
-  // =====================================
   // AUTO FETCH IMAGE
-  // =====================================
   const fetchImage = async () => {
 
     if (!name) {
@@ -101,9 +97,7 @@ function SellerDashboard() {
     }
   };
 
-  // =====================================
   // ADD PRODUCT
-  // =====================================
   const handleAddProduct = async (e) => {
 
     e.preventDefault();
@@ -137,9 +131,7 @@ function SellerDashboard() {
     fetchMyProducts();
   };
 
-  // =====================================
   // DELETE PRODUCT
-  // =====================================
   const handleDelete = async (id) => {
 
     await fetch(
@@ -157,9 +149,7 @@ function SellerDashboard() {
     fetchMyProducts();
   };
 
-  // =====================================
   // EDIT CLICK
-  // =====================================
   const handleEditClick = (product) => {
 
     setEditingId(product._id);
@@ -172,9 +162,7 @@ function SellerDashboard() {
     });
   };
 
-  // =====================================
   // UPDATE PRODUCT
-  // =====================================
   const handleUpdate = async (id) => {
 
     await fetch(
@@ -269,7 +257,7 @@ function SellerDashboard() {
             <div
               key={i}
               className="bg-white rounded-[30px]
-              p-7 shadow-lg"
+              p-7 shadow-md"
             >
 
               <div
@@ -307,17 +295,24 @@ function SellerDashboard() {
         {/* MAIN GRID */}
         <div
           className="grid grid-cols-1
-          lg:grid-cols-3 gap-10"
+          lg:grid-cols-3 gap-10 items-start"
         >
 
-          {/* ADD PRODUCT */}
-          <div className="lg:col-span-1">
+          {/* LEFT SIDE */}
+          <div className="lg:sticky lg:top-28 self-start">
 
             <form
               onSubmit={handleAddProduct}
-              className="sticky top-28
+
+              className="
               bg-white rounded-[35px]
-              p-8 shadow-lg"
+              p-8 shadow-md
+
+              max-h-[85vh]
+              overflow-y-auto
+
+              scrollbar-thin
+            "
             >
 
               <h2
@@ -400,7 +395,8 @@ function SellerDashboard() {
                   onClick={fetchImage}
                   className="w-full py-4
                   rounded-2xl
-                  bg-blue-600 text-white"
+                  bg-blue-600 text-white
+                  font-semibold"
                 >
                   Auto Fetch Image ✨
                 </button>
@@ -436,7 +432,7 @@ function SellerDashboard() {
                 <div
                   key={p._id}
                   className="bg-white rounded-[35px]
-                  overflow-hidden shadow-lg"
+                  overflow-hidden shadow-md"
                 >
 
                   {editingId === p._id ? (

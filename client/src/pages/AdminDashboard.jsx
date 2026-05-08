@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import toast from "react-hot-toast";
+
 function AdminDashboard() {
 
   const [products, setProducts] = useState([]);
@@ -33,6 +35,12 @@ function AdminDashboard() {
         );
 
         setProducts([]);
+
+        toast.error(
+          data.message ||
+            "Failed to fetch products ❌"
+        );
+
         return;
       }
 
@@ -41,7 +49,10 @@ function AdminDashboard() {
     } catch {
 
       setError("Server error");
+
       setProducts([]);
+
+      toast.error("Server error ❌");
     }
   };
 
@@ -51,23 +62,46 @@ function AdminDashboard() {
     type
   ) => {
 
-    const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/api/products/${id}/${type}`,
-      {
-        method: "PUT",
-        headers: {
-          Authorization:
-            "Bearer " +
-            localStorage.getItem("token"),
-        },
+    try {
+
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/products/${id}/${type}`,
+        {
+          method: "PUT",
+
+          headers: {
+            Authorization:
+              "Bearer " +
+              localStorage.getItem("token"),
+          },
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+
+        toast.error(
+          data.message ||
+            "Action failed ❌"
+        );
+
+        return;
       }
-    );
 
-    const data = await res.json();
+      toast.success(
+        data.message ||
+          "Product updated successfully 🎉"
+      );
 
-    alert(data.message);
+      fetchProducts();
 
-    fetchProducts();
+    } catch {
+
+      toast.error(
+        "Something went wrong ❌"
+      );
+    }
   };
 
   // FETCH ORDERS
@@ -96,6 +130,12 @@ function AdminDashboard() {
         );
 
         setOrders([]);
+
+        toast.error(
+          data.message ||
+            "Failed to fetch orders ❌"
+        );
+
         return;
       }
 
@@ -104,7 +144,10 @@ function AdminDashboard() {
     } catch {
 
       setError("Server error");
+
       setOrders([]);
+
+      toast.error("Server error ❌");
     }
   };
 
@@ -114,29 +157,53 @@ function AdminDashboard() {
     status
   ) => {
 
-    const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/api/orders/${id}/status`,
-      {
-        method: "PUT",
+    try {
 
-        headers: {
-          "Content-Type":
-            "application/json",
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/orders/${id}/status`,
+        {
+          method: "PUT",
 
-          Authorization:
-            "Bearer " +
-            localStorage.getItem("token"),
-        },
+          headers: {
+            "Content-Type":
+              "application/json",
 
-        body: JSON.stringify({ status }),
+            Authorization:
+              "Bearer " +
+              localStorage.getItem("token"),
+          },
+
+          body: JSON.stringify({
+            status,
+          }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+
+        toast.error(
+          data.message ||
+            "Order update failed ❌"
+        );
+
+        return;
       }
-    );
 
-    const data = await res.json();
+      toast.success(
+        data.message ||
+          "Order updated successfully 🚀"
+      );
 
-    alert(data.message);
+      fetchOrders();
 
-    fetchOrders();
+    } catch {
+
+      toast.error(
+        "Something went wrong ❌"
+      );
+    }
   };
 
   useEffect(() => {
