@@ -198,11 +198,19 @@ function ProductDetail() {
                   "https://via.placeholder.com/500"
                 }
                 alt={product.name}
-                className="w-full max-h-[520px]
-                object-contain
-                transition duration-700
-                group-hover:scale-110
-                drop-shadow-2xl"
+                className="
+w-full max-h-[520px]
+object-contain
+
+transition-all duration-700
+
+group-hover:scale-[1.12]
+group-hover:rotate-1
+
+drop-shadow-[0_25px_60px_rgba(0,0,0,0.25)]
+
+hover:drop-shadow-[0_35px_90px_rgba(0,0,0,0.35)]
+"
               />
 
               {/* FLOATING BADGE */}
@@ -224,7 +232,13 @@ function ProductDetail() {
           </div>
 
           {/* RIGHT CONTENT */}
-          <div className="flex flex-col gap-6">
+          <div
+  className="
+  flex flex-col gap-6
+  lg:sticky lg:top-28
+  h-fit
+"
+>
 
             <div
               className="bg-white rounded-[35px]
@@ -353,7 +367,11 @@ function ProductDetail() {
                   hover:scale-[1.03]
                   active:scale-95
                   transition-all duration-300
-                  shadow-[0_10px_40px_rgba(0,0,0,0.3)]"
+                  shadow-[0_15px_45px_rgba(0,0,0,0.35)]
+
+hover:shadow-[0_25px_70px_rgba(0,0,0,0.45)]
+
+hover:-translate-y-1"
                 >
 
                   <div
@@ -373,10 +391,16 @@ function ProductDetail() {
                   bg-white border-2 border-black
                   py-5 rounded-3xl
                   font-bold text-lg
-                  hover:bg-black hover:text-white
-                  hover:scale-[1.03]
-                  active:scale-95
-                  transition-all duration-300"
+                 hover:bg-black hover:text-white
+
+hover:scale-[1.03]
+hover:-translate-y-1
+
+hover:shadow-[0_20px_60px_rgba(0,0,0,0.18)]
+
+active:scale-95
+
+transition-all duration-300"
                 >
 
                   <div
@@ -392,6 +416,38 @@ function ProductDetail() {
                 </button>
               </div>
             </div>
+{/* TRUST CHIPS */}
+<div className="mt-6 flex flex-wrap gap-3">
+
+  {[
+    "🔒 Secure Checkout",
+    "🚚 Fast Delivery",
+    "✨ Premium Quality",
+  ].map((chip, i) => (
+
+    <div
+      key={i}
+
+      className="
+      px-5 py-3 rounded-full
+  bg-white/80 backdrop-blur-xl
+      border border-white/60
+      shadow-lg
+
+      hover:-translate-y-1
+      hover:shadow-2xl
+
+      transition-all duration-300
+
+      text-sm font-semibold
+      text-gray-700
+    "
+    >
+      {chip}
+    </div>
+  ))}
+</div>
+
 
             {/* DELIVERY CARDS */}
             <div className="grid sm:grid-cols-3 gap-5">
@@ -522,6 +578,12 @@ function ProductDetail() {
               className="w-full border border-gray-200
               p-5 rounded-3xl text-sm outline-none
               focus:ring-2 focus:ring-black
+
+hover:border-black
+
+hover:shadow-[0_10px_40px_rgba(0,0,0,0.06)]
+
+transition-all duration-300
               resize-none"
               rows={5}
             />
@@ -547,9 +609,18 @@ function ProductDetail() {
               reviews.map((r, i) => (
                 <div
                   key={i}
-                  className="bg-[#f7f9fc]
-                  rounded-[30px] p-6
-                  border border-gray-100"
+                  className="
+bg-[#f7f9fc]
+rounded-[30px]
+p-6
+
+border border-gray-100
+
+hover:-translate-y-1
+hover:shadow-[0_15px_40px_rgba(0,0,0,0.08)]
+
+transition-all duration-300
+"
                 >
 
                   <div
@@ -700,10 +771,20 @@ function ProductDetail() {
                   </div>
 
                   <button
-                    className="mt-6 w-full py-4
-                    rounded-2xl bg-black text-white
-                    font-bold hover:scale-[1.02]
-                    transition"
+                    className="
+mt-6 w-full py-4
+
+rounded-2xl
+bg-black text-white
+font-bold
+
+hover:scale-[1.02]
+hover:-translate-y-1
+
+hover:shadow-[0_20px_50px_rgba(0,0,0,0.3)]
+
+transition-all duration-300
+"
                   >
                     View Product 👀
                   </button>
