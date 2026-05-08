@@ -137,11 +137,14 @@ function ProductDetail() {
       {/* MAIN SECTION */}
       <div className="max-w-7xl mx-auto">
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
 
           {/* LEFT IMAGE */}
           <div
-            className="bg-white rounded-[35px]
+           className="
+  h-fit
+
+  bg-white rounded-[35px]
             shadow-[0_20px_60px_rgba(0,0,0,0.08)]
             p-6 relative overflow-hidden
             border border-white/60 backdrop-blur-xl"
@@ -178,7 +181,7 @@ function ProductDetail() {
             <div
               className="relative group
               bg-gradient-to-br from-gray-50 to-gray-100
-              rounded-[30px] p-10
+              rounded-[30px] p-4
               overflow-hidden"
             >
 
@@ -198,8 +201,10 @@ function ProductDetail() {
                   "https://via.placeholder.com/500"
                 }
                 alt={product.name}
-                className="
-w-full max-h-[520px]
+  className="
+w-full h-auto
+max-h-[420px]
+
 object-contain
 
 transition-all duration-700

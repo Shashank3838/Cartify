@@ -12,6 +12,7 @@ import {
 } from "react-router-dom";
 
 import { CartContext } from "../context/CartContext";
+import LoadingScreen from "../components/LoadingScreen";
 
 function Home() {
   const [products, setProducts] = useState([]);
@@ -30,6 +31,7 @@ function Home() {
   const [sort, setSort] = useState("");
 
   const [wishlist, setWishlist] = useState([]);
+const [pageLoading, setPageLoading] = useState(false);
 
   // 🔥 SLIDER REFS
   const trendingRef = useRef(null);
@@ -52,6 +54,19 @@ function Home() {
 
     setWishlist(stored);
   }, []);
+  useEffect(() => {
+
+  const interval = setInterval(() => {
+
+    setCurrentSlide((prev) =>
+      (prev + 1) % heroSlides.length
+    );
+
+  }, 5000);
+
+  return () => clearInterval(interval);
+
+}, []);
 
   const toggleWishlist = (product) => {
     const stored =
@@ -78,6 +93,20 @@ function Home() {
 
     setWishlist(updated);
   };
+
+const navigateWithLoading = (path) => {
+
+  setPageLoading(true);
+
+  setTimeout(() => {
+
+    navigate(path);
+
+    setPageLoading(false);
+
+  }, 1400);
+};
+
 
   const isWishlisted = (id) => {
     return wishlist.some((item) => item._id === id);
@@ -132,7 +161,37 @@ function Home() {
   const featuredProducts = [...filteredProducts].sort(
     () => 0.5 - Math.random()
   );
+const heroSlides = [
+  {
+    title1: "Discover",
+    title2: "Premium Products ✨",
+    desc: "Shop trending gadgets, luxury fashion, accessories and futuristic lifestyle products with a cinematic premium shopping experience.",
+   glow: "from-blue-950 via-black to-black",
+  },
 
+  {
+    title1: "Luxury",
+    title2: "Fashion Collection 👕",
+    desc: "Explore stylish collections designed with modern aesthetics and premium quality.",
+    glow: "from-pink-950 via-black to-black",
+  },
+
+  {
+    title1: "Next Gen",
+    title2: "Tech Gadgets ⚡",
+    desc: "Upgrade your digital lifestyle with futuristic gadgets and premium accessories.",
+    glow: "from-cyan-950 via-black to-black",
+  },
+
+  {
+    title1: "Upgrade Your",
+    title2: "Lifestyle 🚀",
+    desc: "Experience cinematic ecommerce with smooth interactions and luxury visuals.",
+    glow: "from-orange-950 via-black to-black",
+  },
+];
+
+const [currentSlide, setCurrentSlide] = useState(0);
   // 🔥 PRODUCT RENDER
   const renderProducts = (items, sliderRef) => (
     <div className="relative">
@@ -174,7 +233,7 @@ function Home() {
           <div
             key={p._id}
             onClick={() =>
-              navigate(`/product/${p._id}`)
+              navigateWithLoading(`/product/${p._id}`)
             }
             className="group min-w-[320px] max-w-[320px]
             relative overflow-hidden rounded-[34px]
@@ -273,7 +332,7 @@ function Home() {
                   onClick={(e) => {
                     e.stopPropagation();
 
-                    navigate(`/product/${p._id}`);
+                    navigateWithLoading(`/product/${p._id}`)
                   }}
                   className="px-6 py-3 rounded-full
                   bg-white/90 backdrop-blur-xl
@@ -367,7 +426,10 @@ function Home() {
     </div>
   );
 
-  return (
+ return (
+  <>
+    {pageLoading && <LoadingScreen />}
+
     <div
       className="min-h-screen px-6 py-6
       bg-[#f5f5f7]"
@@ -470,98 +532,290 @@ function Home() {
       ) : (
         <>
           {/* HERO */}
-          {!query && (
-            <section
-              className="relative overflow-hidden
-              rounded-[42px]
-              bg-gradient-to-br
-              from-black via-gray-900 to-blue-950
-              px-10 md:px-20 py-24 mb-16
-              shadow-[0_20px_80px_rgba(0,0,0,0.35)]"
-            >
+{!query && (
+  <section
+    className="
+    relative overflow-hidden
 
-              <div
-                className="absolute top-0 right-0
-                w-[500px] h-[500px]
-                bg-blue-500/20 blur-[120px]
-                rounded-full"
-              />
+    rounded-[42px]
 
-              <div
-                className="absolute bottom-0 left-0
-                w-[300px] h-[300px]
-                bg-white/10 blur-[100px]
-                rounded-full"
-              />
+    bg-black
 
-              <div className="relative z-10 max-w-4xl">
+    px-10 md:px-20
 
-                <p
-                  className="uppercase tracking-[8px]
-                  text-sm text-gray-400
-                  mb-8 font-semibold"
-                >
-                  Premium Ecommerce Experience
-                </p>
+    py-28 mb-16
 
-                <h1
-                  className="text-6xl md:text-8xl
-                  font-black leading-none text-white"
-                >
-                  Discover
-                </h1>
+    shadow-[0_20px_100px_rgba(0,0,0,0.45)]
+  "
+  >
 
-                <h1
-                  className="text-6xl md:text-8xl
-                  font-black leading-none
-                  text-gray-300 mt-2"
-                >
-                  Premium Products ✨
-                </h1>
+    {/* BACKGROUND ANIMATION */}
+    <div
+  className={`
+    absolute inset-0
 
-                <p
-                  className="text-gray-300 text-xl
-                  leading-relaxed mt-10 max-w-2xl"
-                >
-                  Shop trending gadgets, fashion,
-                  accessories and lifestyle products
-                  with a modern luxury experience.
-                </p>
+    bg-gradient-to-br
+    ${heroSlides[currentSlide].glow}
 
-                <div
-                  className="flex flex-wrap gap-5 mt-12"
-                >
+    animate-pulse
+  `}
+/>
 
-                  <button
-                    onClick={() => {
-                      window.scrollTo({
-                        top: 850,
-                        behavior: "smooth",
-                      });
-                    }}
-                    className="bg-white text-black
-                    px-10 py-5 rounded-2xl
-                    font-bold text-lg
-                    hover:scale-105 transition-all"
-                  >
-                    Shop Now 🚀
-                  </button>
+    {/* GLOW 1 */}
+    <div
+      className="
+      absolute top-[-100px] right-[-100px]
 
-                  <button
-                    className="border border-white/20
-                    bg-white/5 backdrop-blur-md
-                    text-white px-10 py-5
-                    rounded-2xl font-semibold
-                    text-lg hover:bg-white
-                    hover:text-black transition-all"
-                  >
-                    Explore Trends 🔥
-                  </button>
-                </div>
-              </div>
-            </section>
-          )}
+      w-[500px] h-[500px]
 
+      bg-blue-500/20
+
+      blur-[140px]
+
+      rounded-full
+    "
+    />
+
+    {/* GLOW 2 */}
+    <div
+      className="
+      absolute bottom-[-120px] left-[-100px]
+
+      w-[400px] h-[400px]
+
+      bg-orange-500/10
+
+      blur-[120px]
+
+      rounded-full
+    "
+    />
+
+    {/* FLOATING PARTICLES */}
+    <div
+      className="
+      absolute top-20 right-40
+
+      text-5xl opacity-20
+
+      animate-bounce
+    "
+    >
+      ✨
+    </div>
+
+    <div
+      className="
+      absolute bottom-24 right-20
+
+      text-4xl opacity-10
+
+      animate-pulse
+    "
+    >
+      ⚡
+    </div>
+
+    {/* CONTENT */}
+    <div className="relative z-10 max-w-5xl">
+
+      {/* TOP TEXT */}
+      <p
+        className="
+        uppercase tracking-[10px]
+
+        text-sm text-gray-400
+
+        mb-8 font-semibold
+
+        animate-[pulse_4s_infinite]
+      "
+      >
+        Premium Ecommerce Experience
+      </p>
+
+      {/* MAIN HEADING */}
+      <div className="overflow-hidden">
+
+        <h1
+          className="
+          text-6xl md:text-8xl
+
+          font-black
+
+          leading-none
+
+          text-white
+
+          animate-[fadeIn_1s_ease]
+        "
+        >
+          {heroSlides[currentSlide].title1}
+        </h1>
+      </div>
+
+      <div className="overflow-hidden">
+
+        <h1
+          className="
+          text-6xl md:text-8xl
+
+          font-black leading-none
+
+          text-gray-300 mt-3
+
+          animate-[fadeIn_1.4s_ease]
+        "
+        >
+          {heroSlides[currentSlide].title2}
+        </h1>
+      </div>
+
+      {/* DESCRIPTION */}
+      <p
+        className="
+        text-gray-300 text-xl
+
+        leading-relaxed
+
+        mt-10 max-w-2xl
+
+        animate-[fadeIn_1.8s_ease]
+      "
+      >
+        {heroSlides[currentSlide].desc}
+      </p>
+
+      {/* BUTTONS */}
+      <div
+        className="
+        flex flex-wrap gap-5 mt-14
+
+        animate-[fadeIn_2s_ease]
+      "
+      >
+
+        <button
+          onClick={() => {
+            window.scrollTo({
+              top: 850,
+              behavior: "smooth",
+            });
+          }}
+
+          className="
+          bg-white text-black
+
+          px-10 py-5 rounded-2xl
+
+          font-bold text-lg
+
+          hover:scale-105
+
+          hover:shadow-[0_10px_40px_rgba(255,255,255,0.3)]
+
+          transition-all duration-300
+        "
+        >
+          Shop Now 🚀
+        </button>
+
+        <button
+          className="
+          border border-white/20
+
+          bg-white/5 backdrop-blur-md
+
+          text-white px-10 py-5
+
+          rounded-2xl font-semibold
+
+          text-lg
+
+          hover:bg-white
+          hover:text-black
+
+          hover:scale-105
+
+          transition-all duration-300
+        "
+        >
+          Explore Trends 🔥
+        </button>
+      </div>
+<div className="flex gap-3 mt-10">
+
+  {heroSlides.map((_, index) => (
+
+    <div
+      key={index}
+
+      className={`
+        h-2 rounded-full transition-all duration-500
+
+        ${
+          currentSlide === index
+            ? "w-10 bg-white"
+            : "w-3 bg-white/30"
+        }
+      `}
+    />
+  ))}
+</div>
+      {/* STATS */}
+      <div
+        className="
+        flex flex-wrap gap-10
+
+        mt-20
+      "
+      >
+
+        <div>
+          <h3
+            className="
+            text-4xl font-black text-white
+          "
+          >
+            10K+
+          </h3>
+
+          <p className="text-gray-400 mt-2">
+            Premium Customers
+          </p>
+        </div>
+
+        <div>
+          <h3
+            className="
+            text-4xl font-black text-white
+          "
+          >
+            5K+
+          </h3>
+
+          <p className="text-gray-400 mt-2">
+            Luxury Products
+          </p>
+        </div>
+
+        <div>
+          <h3
+            className="
+            text-4xl font-black text-white
+          "
+          >
+            24/7
+          </h3>
+
+          <p className="text-gray-400 mt-2">
+            AI Powered Support
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+)}
           {/* TITLE */}
           <h2
             className="text-4xl font-black mb-8
@@ -748,7 +1002,8 @@ function Home() {
           )}
         </>
       )}
-    </div>
+  </div>
+    </>
   );
 }
 

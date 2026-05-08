@@ -2,7 +2,10 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import { CartContext } from "../context/CartContext";
 
+import LoadingScreen from "./LoadingScreen";
+
 function Navbar() {
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -12,6 +15,8 @@ function Navbar() {
   const [suggestions, setSuggestions] = useState([]);
 
   const [showCartDrawer, setShowCartDrawer] = useState(false);
+
+  const [pageLoading, setPageLoading] = useState(false);
 
   const {
     cart,
@@ -29,23 +34,35 @@ function Navbar() {
   }, []);
 
   useEffect(() => {
+
     const syncAuth = () => {
+
       const token = localStorage.getItem("token");
+
       setIsLoggedIn(!!token);
     };
 
     window.addEventListener("storage", syncAuth);
 
-    return () => window.removeEventListener("storage", syncAuth);
+    return () =>
+      window.removeEventListener(
+        "storage",
+        syncAuth
+      );
+
   }, []);
 
   // FETCH USER
   useEffect(() => {
+
     const fetchUser = async () => {
+
       try {
+
         setLoading(true);
 
-        const token = localStorage.getItem("token");
+        const token =
+          localStorage.getItem("token");
 
         if (!token) {
           setLoading(false);
@@ -56,78 +73,127 @@ function Navbar() {
           `${import.meta.env.VITE_API_URL}/api/auth/protected`,
           {
             headers: {
-              Authorization: "Bearer " + token,
+              Authorization:
+                "Bearer " + token,
             },
           }
         );
 
         const data = await res.json();
 
-        if (res.ok && data.user?.role) {
+        if (
+          res.ok &&
+          data.user?.role
+        ) {
           setRole(data.user.role);
         } else {
           setRole(null);
         }
+
       } catch (err) {
+
         console.error(err);
+
         setRole(null);
+
       } finally {
+
         setLoading(false);
       }
     };
 
     if (isLoggedIn) fetchUser();
+
     else {
+
       setLoading(false);
+
       setRole(null);
     }
+
   }, [isLoggedIn]);
 
   // FETCH PRODUCTS
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/products`)
+
+    fetch(
+      `${import.meta.env.VITE_API_URL}/api/products`
+    )
       .then((res) => res.json())
       .then((data) => {
+
         setAllProducts(data);
+
       })
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        console.error(err)
+      );
+
   }, []);
 
   // LIVE SEARCH
   useEffect(() => {
+
     if (!search.trim()) {
+
       setSuggestions([]);
+
       return;
     }
 
     const filtered = allProducts
       .filter((p) =>
-        p.name.toLowerCase().includes(search.toLowerCase())
+        p.name
+          .toLowerCase()
+          .includes(search.toLowerCase())
       )
       .slice(0, 6);
 
     setSuggestions(filtered);
+
   }, [search, allProducts]);
 
+  // LOADING NAVIGATION
+  const navigateWithLoading = (path) => {
+
+    setPageLoading(true);
+
+    setTimeout(() => {
+
+      navigate(path);
+
+      setPageLoading(false);
+
+    }, 1400);
+  };
+
   const handleLogout = () => {
+
     localStorage.removeItem("token");
 
-    window.dispatchEvent(new Event("storage"));
+    window.dispatchEvent(
+      new Event("storage")
+    );
 
     setIsLoggedIn(false);
+
     setRole(null);
 
-    navigate("/login");
+    navigateWithLoading("/login");
   };
 
   const becomeSeller = async () => {
+
     try {
+
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}/api/auth/become-seller`,
         {
           method: "PUT",
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
+            Authorization:
+              "Bearer " +
+              localStorage.getItem("token"),
           },
         }
       );
@@ -137,30 +203,38 @@ function Navbar() {
       setRole("seller");
 
       alert(data.message);
+
     } catch (err) {
+
       console.error(err);
     }
   };
 
   const handleSearch = () => {
+
     if (!search.trim()) return;
 
-    navigate(`/?q=${search}`);
+    navigateWithLoading(`/?q=${search}`);
 
     setSuggestions([]);
+
     setSearch("");
   };
 
   const handleKeyDown = (e) => {
+
     if (e.key === "Enter") {
+
       handleSearch();
     }
   };
 
   const handleSuggestionClick = (name) => {
-    navigate(`/?q=${name}`);
+
+    navigateWithLoading(`/?q=${name}`);
 
     setSuggestions([]);
+
     setSearch("");
   };
 
@@ -174,6 +248,9 @@ function Navbar() {
 
   return (
     <>
+      {/* LOADING SCREEN */}
+      {pageLoading && <LoadingScreen />}
+
       {/* NAVBAR */}
       <nav
         className="
@@ -189,25 +266,51 @@ function Navbar() {
         transition-all duration-500
       "
       >
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-5">
+
+        <div
+          className="
+          flex flex-col lg:flex-row
+          items-center justify-between gap-5
+        "
+        >
 
           {/* LEFT */}
-          <div className="flex items-center gap-10 w-full lg:w-auto">
+          <div
+            className="
+            flex items-center gap-10
+            w-full lg:w-auto
+          "
+          >
 
             {/* LOGO */}
             <div
-              onClick={() => navigate("/")}
-              className="group flex items-center gap-3 cursor-pointer"
+              onClick={() =>
+                navigateWithLoading("/")
+              }
+
+              className="
+              group flex items-center
+              gap-3 cursor-pointer
+            "
             >
+
               <div
                 className="
                 w-11 h-11 rounded-2xl
-                bg-gradient-to-br from-black to-gray-800
+                bg-gradient-to-br
+                from-black to-gray-800
+
                 text-white
-                flex items-center justify-center
+
+                flex items-center
+                justify-center
+
                 text-lg
+
                 shadow-lg
+
                 group-hover:scale-110
+
                 transition-all duration-300
               "
               >
@@ -215,62 +318,107 @@ function Navbar() {
               </div>
 
               <div>
+
                 <h1
                   className="
-                  text-2xl font-black tracking-tight
-                  bg-gradient-to-r from-black to-gray-600
-                  bg-clip-text text-transparent
+                  text-2xl font-black
+                  tracking-tight
+
+                  bg-gradient-to-r
+                  from-black to-gray-600
+
+                  bg-clip-text
+                  text-transparent
                 "
                 >
                   Cartify
                 </h1>
 
-                <p className="text-[11px] text-gray-500 -mt-1 tracking-widest">
+                <p
+                  className="
+                  text-[11px]
+                  text-gray-500
+
+                  -mt-1
+                  tracking-widest
+                "
+                >
                   PREMIUM STORE
                 </p>
               </div>
             </div>
 
             {/* SEARCH */}
-            <div className="hidden md:block relative w-[380px]">
+            <div
+              className="
+              hidden md:block
+              relative w-[380px]
+            "
+            >
 
               <div
                 className="
                 flex items-center gap-3
+
                 bg-white/90
+
                 border border-gray-200
+
                 rounded-full
+
                 px-5 py-3
+
                 shadow-sm
+
                 focus-within:shadow-xl
+
                 focus-within:scale-[1.02]
+
                 focus-within:border-gray-400
+
                 transition-all duration-300
               "
               >
-                <span className="text-lg">🔍</span>
+
+                <span className="text-lg">
+                  🔍
+                </span>
 
                 <input
                   type="text"
+
                   placeholder="Search premium products..."
+
                   value={search}
-                  onChange={(e) => setSearch(e.target.value)}
+
+                  onChange={(e) =>
+                    setSearch(e.target.value)
+                  }
+
                   onKeyDown={handleKeyDown}
+
                   className="
-                  bg-transparent outline-none w-full
-                  text-sm text-black
+                  bg-transparent outline-none
+                  w-full text-sm text-black
+
                   placeholder:text-gray-400
                 "
                 />
 
                 {search && (
+
                   <button
                     onClick={() => {
+
                       setSearch("");
+
                       setSuggestions([]);
                     }}
+
                     className="
-                    text-gray-400 hover:text-black
+                    text-gray-400
+                    hover:text-black
+
                     transition
                   "
                   >
@@ -281,46 +429,77 @@ function Navbar() {
 
               {/* SUGGESTIONS */}
               {suggestions.length > 0 && (
+
                 <div
                   className="
                   absolute top-16 left-0 w-full
+
                   bg-white/95 backdrop-blur-xl
+
                   rounded-3xl
+
                   border border-gray-200
+
                   shadow-2xl
+
                   overflow-hidden
+
                   z-50
                 "
                 >
+
                   {suggestions.map((item) => (
+
                     <button
                       key={item._id}
+
                       onClick={() =>
-                        handleSuggestionClick(item.name)
+                        handleSuggestionClick(
+                          item.name
+                        )
                       }
+
                       className="
-                      w-full text-left px-5 py-4
+                      w-full text-left
+
+                      px-5 py-4
+
                       hover:bg-gray-100/80
+
                       transition-all duration-200
+
                       flex items-center gap-4
                     "
                     >
+
                       <img
                         src={item.image}
                         alt={item.name}
+
                         className="
                         w-14 h-14 rounded-2xl
+
                         object-cover
+
                         shadow-md
                       "
                       />
 
                       <div className="flex-1">
-                        <p className="font-semibold text-gray-800">
+
+                        <p
+                          className="
+                          font-semibold text-gray-800
+                        "
+                        >
                           {item.name}
                         </p>
 
-                        <p className="text-sm text-gray-500">
+                        <p
+                          className="
+                          text-sm text-gray-500
+                        "
+                        >
                           ₹{item.price}
                         </p>
                       </div>
@@ -338,24 +517,40 @@ function Navbar() {
           {/* RIGHT */}
           <div
             className="
-            flex flex-wrap items-center justify-center
-            gap-6 text-sm
+            flex flex-wrap items-center
+            justify-center gap-6 text-sm
           "
           >
 
-            <Link to="/" className={linkStyle("/")}>
-              <span className="hover:-translate-y-[2px] transition inline-block">
+            <button
+              onClick={() =>
+                navigateWithLoading("/")
+              }
+
+              className={linkStyle("/")}
+            >
+              <span
+                className="
+                hover:-translate-y-[2px]
+                transition inline-block
+              "
+              >
                 Home
               </span>
-            </Link>
+            </button>
 
             {/* CART */}
             <button
-              onClick={() => setShowCartDrawer(true)}
+              onClick={() =>
+                setShowCartDrawer(true)
+              }
+
               className={linkStyle("/cart")}
             >
               Cart
+
               {cartCount > 0 && (
+
                 <span className="ml-1">
                   ({cartCount})
                 </span>
@@ -364,51 +559,91 @@ function Navbar() {
 
             {!isLoggedIn ? (
               <>
-                <Link to="/login" className={linkStyle("/login")}>
-                  Login
-                </Link>
 
-                <Link
-                  to="/register"
+                <button
+                  onClick={() =>
+                    navigateWithLoading(
+                      "/login"
+                    )
+                  }
+
+                  className={linkStyle("/login")}
+                >
+                  Login
+                </button>
+
+                <button
+                  onClick={() =>
+                    navigateWithLoading(
+                      "/register"
+                    )
+                  }
+
                   className="
                   px-5 py-2.5 rounded-full
-                  bg-gradient-to-r from-black to-gray-800
+
+                  bg-gradient-to-r
+                  from-black to-gray-800
+
                   text-white font-semibold
+
                   shadow-lg shadow-black/20
+
                   hover:scale-105
                   hover:shadow-xl
+
                   transition-all duration-300
                 "
                 >
                   Register
-                </Link>
+                </button>
               </>
             ) : (
               <>
-                <Link
-                  to="/my-orders"
+
+                <button
+                  onClick={() =>
+                    navigateWithLoading(
+                      "/my-orders"
+                    )
+                  }
+
                   className={linkStyle("/my-orders")}
                 >
                   Orders
-                </Link>
+                </button>
 
-                <Link
-                  to="/wishlist"
+                <button
+                  onClick={() =>
+                    navigateWithLoading(
+                      "/wishlist"
+                    )
+                  }
+
                   className={linkStyle("/wishlist")}
                 >
                   Wishlist
-                </Link>
+                </button>
 
                 {!loading && role && (
                   <>
+
                     {role === "user" && (
+
                       <button
                         onClick={becomeSeller}
+
                         className="
                         px-4 py-2 rounded-full
-                        bg-gradient-to-r from-gray-100 to-gray-200
-                        hover:from-black hover:to-gray-800
+
+                        bg-gradient-to-r
+                        from-gray-100 to-gray-200
+
+                        hover:from-black
+                        hover:to-gray-800
+
                         hover:text-white
+
                         transition-all duration-300
                       "
                       >
@@ -417,29 +652,45 @@ function Navbar() {
                     )}
 
                     {role === "seller" && (
-                      <Link
-                        to="/seller"
+
+                      <button
+                        onClick={() =>
+                          navigateWithLoading(
+                            "/seller"
+                          )
+                        }
+
                         className={linkStyle("/seller")}
                       >
                         Seller
-                      </Link>
+                      </button>
                     )}
 
                     {role === "admin" && (
                       <>
-                        <Link
-                          to="/seller"
+                        <button
+                          onClick={() =>
+                            navigateWithLoading(
+                              "/seller"
+                            )
+                          }
+
                           className={linkStyle("/seller")}
                         >
                           Seller
-                        </Link>
+                        </button>
 
-                        <Link
-                          to="/admin"
+                        <button
+                          onClick={() =>
+                            navigateWithLoading(
+                              "/admin"
+                            )
+                          }
+
                           className={linkStyle("/admin")}
                         >
                           Admin
-                        </Link>
+                        </button>
                       </>
                     )}
                   </>
@@ -447,12 +698,17 @@ function Navbar() {
 
                 <button
                   onClick={handleLogout}
+
                   className="
                   px-5 py-2 rounded-full
+
                   bg-red-500 text-white
+
                   hover:bg-red-600
                   hover:scale-105
+
                   shadow-lg
+
                   transition-all duration-300
                 "
                 >
@@ -469,18 +725,28 @@ function Navbar() {
           <div
             className="
             flex items-center gap-3
+
             bg-white border border-gray-200
+
             rounded-full px-4 py-3
           "
           >
+
             <span>🔍</span>
 
             <input
               type="text"
+
               placeholder="Search products..."
+
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+
+              onChange={(e) =>
+                setSearch(e.target.value)
+              }
+
               onKeyDown={handleKeyDown}
+
               className="
               bg-transparent outline-none
               w-full text-sm
@@ -492,11 +758,17 @@ function Navbar() {
 
       {/* BACKDROP */}
       {showCartDrawer && (
+
         <div
-          onClick={() => setShowCartDrawer(false)}
+          onClick={() =>
+            setShowCartDrawer(false)
+          }
+
           className="
           fixed inset-0 z-40
+
           bg-black/40
+
           backdrop-blur-sm
         "
         />
@@ -506,14 +778,26 @@ function Navbar() {
       <div
         className={`
         fixed top-0 right-0 h-full
+
         w-[390px]
+
         bg-white/95 backdrop-blur-2xl
+
         z-50
+
         border-l border-gray-200
+
         shadow-[0_0_40px_rgba(0,0,0,0.15)]
+
         transition-transform duration-500
+
         flex flex-col
-        ${showCartDrawer ? "translate-x-0" : "translate-x-full"}
+
+        ${
+          showCartDrawer
+            ? "translate-x-0"
+            : "translate-x-full"
+        }
       `}
       >
 
@@ -521,25 +805,45 @@ function Navbar() {
         <div
           className="
           flex items-center justify-between
-          p-6 border-b border-gray-200
+
+          p-6
+
+          border-b border-gray-200
         "
         >
+
           <div>
-            <h2 className="text-2xl font-black text-black">
+
+            <h2
+              className="
+              text-2xl font-black text-black
+            "
+            >
               Your Cart
             </h2>
 
-            <p className="text-sm text-gray-500 mt-1">
+            <p
+              className="
+              text-sm text-gray-500 mt-1
+            "
+            >
               Premium shopping experience
             </p>
           </div>
 
           <button
-            onClick={() => setShowCartDrawer(false)}
+            onClick={() =>
+              setShowCartDrawer(false)
+            }
+
             className="
             w-10 h-10 rounded-full
+
             bg-gray-100
-            hover:bg-black hover:text-white
+
+            hover:bg-black
+            hover:text-white
+
             transition-all duration-300
           "
           >
@@ -548,19 +852,34 @@ function Navbar() {
         </div>
 
         {/* ITEMS */}
-        <div className="flex-1 overflow-y-auto p-5 space-y-4">
+        <div
+          className="
+          flex-1 overflow-y-auto
+
+          p-5 space-y-4
+        "
+        >
 
           {cart.length === 0 ? (
             <div className="text-center mt-24">
+
               <div className="text-6xl mb-5">
                 🛍️
               </div>
 
-              <h3 className="text-xl font-bold text-gray-800">
+              <h3
+                className="
+                text-xl font-bold text-gray-800
+              "
+              >
                 Cart is Empty
               </h3>
 
-              <p className="text-gray-500 mt-2 text-sm">
+              <p
+                className="
+                text-gray-500 mt-2 text-sm
+              "
+              >
                 Add premium products to continue
               </p>
             </div>
@@ -568,45 +887,75 @@ function Navbar() {
             cart.map((item) => (
               <div
                 key={item._id}
+
                 className="
                 flex gap-4
-                bg-gradient-to-br from-gray-50 to-white
+
+                bg-gradient-to-br
+                from-gray-50 to-white
+
                 border border-gray-100
+
                 rounded-3xl
+
                 p-4
+
                 hover:shadow-xl
                 hover:-translate-y-1
+
                 transition-all duration-300
               "
               >
+
                 <img
                   src={item.image}
                   alt={item.name}
+
                   className="
                   w-24 h-24 rounded-2xl
+
                   object-cover
+
                   shadow-md
                 "
                 />
 
                 <div className="flex-1">
-                  <h3 className="font-semibold text-gray-800">
+
+                  <h3
+                    className="
+                    font-semibold text-gray-800
+                  "
+                  >
                     {item.name}
                   </h3>
 
-                  <p className="font-black text-lg mt-1">
+                  <p
+                    className="
+                    font-black text-lg mt-1
+                  "
+                  >
                     ₹{item.price}
                   </p>
 
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p
+                    className="
+                    text-xs text-gray-500 mt-1
+                  "
+                  >
                     Quantity: {item.qty}
                   </p>
 
                   <button
-                    onClick={() => removeFromCart(item._id)}
+                    onClick={() =>
+                      removeFromCart(item._id)
+                    }
+
                     className="
                     mt-3 text-red-500 text-sm
+
                     hover:text-red-600
+
                     transition
                   "
                   >
@@ -622,31 +971,55 @@ function Navbar() {
         <div
           className="
           border-t border-gray-200
+
           p-6
+
           bg-white/90
         "
         >
-          <div className="flex items-center justify-between mb-5">
+
+          <div
+            className="
+            flex items-center justify-between
+
+            mb-5
+          "
+          >
+
             <span className="text-gray-500">
               Total
             </span>
 
-            <span className="text-3xl font-black text-black">
+            <span
+              className="
+              text-3xl font-black text-black
+            "
+            >
               ₹{total}
             </span>
           </div>
 
           <button
             onClick={() => {
+
               setShowCartDrawer(false);
-              navigate("/cart");
+
+              navigateWithLoading("/cart");
             }}
+
             className="
             w-full py-4 rounded-2xl
-            bg-gradient-to-r from-black to-gray-800
-            text-white font-semibold text-lg
+
+            bg-gradient-to-r
+            from-black to-gray-800
+
+            text-white font-semibold
+            text-lg
+
             shadow-xl shadow-black/20
+
             hover:scale-[1.02]
+
             transition-all duration-300
           "
           >
