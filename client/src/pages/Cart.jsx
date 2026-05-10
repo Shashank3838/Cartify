@@ -223,13 +223,36 @@ function Cart() {
   return (
 
     <div
-      className="
-      min-h-screen
-      bg-[#f5f5f7]
-      px-4 sm:px-6 py-10
-    "
-    >
+  className="
+  min-h-screen
+  bg-[#f5f5f7]
+  px-4 sm:px-6 py-10
+  relative overflow-hidden
+"
+>
+  {/* BACKGROUND GLOWS */}
+<div
+  className="
+  absolute top-0 left-0
+  w-[500px] h-[500px]
+  bg-blue-200/30
+  blur-[120px]
+  rounded-full
+  -z-0
+"
+/>
 
+<div
+  className="
+  absolute bottom-0 right-0
+  w-[500px] h-[500px]
+  bg-pink-200/30
+  blur-[120px]
+  rounded-full
+  -z-0
+"
+/>
+<div className="relative z-10"></div>
       {/* TITLE */}
 
       <div className="max-w-7xl mx-auto mb-12">
@@ -314,8 +337,9 @@ function Cart() {
       ) : (
 
         <div
-          className="
-          max-w-7xl mx-auto
+  className="
+  relative z-10
+  max-w-7xl mx-auto
           grid grid-cols-1 lg:grid-cols-3
           gap-10
         "
@@ -358,7 +382,10 @@ function Cart() {
                   >
 
                     <img
-                      src={item.image}
+                      src={
+  item.image ||
+  "https://images.unsplash.com/photo-1523275335684-37898b6baf30"
+}
                       alt={item.name}
 
                       className="
@@ -598,6 +625,65 @@ function Cart() {
                 )}
               </div>
             </div>
+
+{/* COUPON */}
+<div
+  className="
+  bg-white/80 backdrop-blur-xl
+  rounded-[35px] p-8
+  shadow-[0_20px_60px_rgba(0,0,0,0.08)]
+  border border-white/60
+"
+>
+
+  <h2
+    className="
+    text-3xl font-black mb-6
+  "
+  >
+    Apply Coupon 🎁
+  </h2>
+
+  <div className="flex flex-col sm:flex-row gap-4">
+
+    <input
+      type="text"
+      placeholder="Enter coupon code"
+
+      className="
+      flex-1 border border-gray-200
+      px-5 py-4 rounded-2xl
+      outline-none
+
+      focus:ring-2 focus:ring-black/80
+
+      hover:border-black
+
+      transition-all duration-300
+    "
+    />
+
+    <button
+      className="
+      px-8 py-4 rounded-2xl
+      bg-black text-white
+      font-bold
+
+      hover:scale-[1.03]
+      hover:shadow-[0_20px_50px_rgba(0,0,0,0.2)]
+
+      transition-all duration-300
+    "
+    >
+      Apply 🚀
+    </button>
+  </div>
+
+  <p className="text-gray-500 mt-4 text-sm">
+    Try: PREMIUM20
+  </p>
+</div>
+
 
             {/* SHIPPING */}
 

@@ -127,10 +127,18 @@ const navigateWithLoading = (path) => {
   const filteredProducts = useMemo(() => {
     let filtered = [...products];
 
-    filtered = filtered.filter((p) =>
-      p.name.toLowerCase().includes(query.toLowerCase())
-    );
+    filtered = filtered.filter((p) => {
 
+  const search = query.toLowerCase();
+
+  return (
+    p.name?.toLowerCase().includes(search) ||
+
+    p.category?.toLowerCase().includes(search) ||
+
+    p.brand?.toLowerCase().includes(search)
+  );
+});
     if (minPrice) {
       filtered = filtered.filter(
         (p) => p.price >= Number(minPrice)
@@ -228,6 +236,64 @@ const heroSlides = [
     desc: "Experience cinematic ecommerce with smooth interactions and luxury visuals.",
     glow: "from-orange-950 via-black to-black",
   },
+];
+
+const premiumCategories = [
+
+  {
+    title: "Luxury Watches",
+    subtitle: "Premium Timepieces",
+    image:
+      "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?q=80&w=1200&auto=format&fit=crop",
+    bg: "from-zinc-100 to-zinc-200",
+    category: "Watches",
+  },
+
+  {
+    title: "Sneakers",
+    subtitle: "Streetwear Collection",
+    image:
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1200&auto=format&fit=crop",
+    bg: "from-blue-100 to-cyan-100",
+    category: "Shoes",
+  },
+
+  {
+    title: "Gaming",
+    subtitle: "Next Gen Setup",
+    image:
+      "https://images.unsplash.com/photo-1593305841991-05c297ba4575?q=80&w=1200&auto=format&fit=crop",
+    bg: "from-purple-100 to-pink-100",
+    category: "Gaming",
+  },
+
+  {
+    title: "Fashion",
+    subtitle: "Luxury Outfits",
+    image:
+      "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=1200&auto=format&fit=crop",
+    bg: "from-orange-100 to-yellow-100",
+    category: "Fashion",
+  },
+
+  {
+    title: "Beauty",
+    subtitle: "Premium Essentials",
+    image:
+      "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1200&auto=format&fit=crop",
+    bg: "from-pink-100 to-rose-100",
+    category: "Beauty",
+  },
+
+  {
+    title: "Electronics",
+    subtitle: "Future Gadgets",
+    image:
+      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1200&auto=format&fit=crop",
+    bg: "from-slate-100 to-gray-200",
+    category: "Electronics",
+  },
+
 ];
 
 const [currentSlide, setCurrentSlide] = useState(0);
@@ -951,6 +1017,163 @@ const [currentSlide, setCurrentSlide] = useState(0);
             </section>
           ) : (
             <>
+
+            {/* PREMIUM CATEGORY GRID */}
+<section className="mb-24">
+
+  <div className="mb-12">
+
+    <h2
+      className="
+      text-5xl md:text-6xl
+      font-black
+      tracking-tight
+      text-gray-900
+    "
+    >
+      Product Categories
+    </h2>
+
+    <p
+      className="
+      text-gray-500
+      mt-4 text-lg
+    "
+    >
+      Explore luxury collections curated for premium shopping
+    </p>
+  </div>
+
+  <div
+    className="
+    grid grid-cols-1
+    md:grid-cols-2
+    lg:grid-cols-3
+    gap-8
+  "
+  >
+
+    {premiumCategories.map((item, index) => (
+
+      <div
+        key={index}
+
+        onClick={() =>
+          navigate(`/?q=${item.category}`)
+        }
+
+        className={`
+          group relative overflow-hidden
+
+          rounded-[36px]
+
+          bg-gradient-to-br ${item.bg}
+
+          min-h-[280px]
+
+          cursor-pointer
+
+          hover:-translate-y-3
+
+          hover:shadow-[0_25px_80px_rgba(0,0,0,0.15)]
+
+          transition-all duration-700
+        `}
+      >
+
+        {/* CONTENT */}
+        <div
+          className="
+          relative z-10
+
+          p-8 h-full
+
+          flex flex-col justify-between
+        "
+        >
+
+          <div>
+
+            <p
+              className="
+              text-sm font-semibold
+
+              text-gray-500 uppercase
+
+              tracking-wide
+            "
+            >
+              {item.subtitle}
+            </p>
+
+            <h3
+              className="
+              text-5xl font-black
+
+              text-gray-800
+
+              mt-3 leading-none
+            "
+            >
+              {item.title}
+            </h3>
+          </div>
+
+          <button
+            className="
+            w-fit mt-8
+
+            px-5 py-3 rounded-xl
+
+            bg-black text-white
+
+            font-semibold
+
+            group-hover:scale-105
+
+            transition-all
+          "
+          >
+            Shop Now →
+          </button>
+        </div>
+
+        {/* IMAGE */}
+        <img
+          src={item.image}
+          alt={item.title}
+
+          className="
+          absolute bottom-0 right-0
+
+          w-[65%] h-[65%]
+
+          object-cover
+
+          transition-transform duration-700
+
+          group-hover:scale-110
+          group-hover:-rotate-3
+        "
+        />
+
+        {/* GLOW */}
+        <div
+          className="
+          absolute inset-0
+
+          opacity-0
+          group-hover:opacity-100
+
+          bg-white/10
+
+          transition duration-500
+        "
+        />
+      </div>
+    ))}
+  </div>
+</section>
               {/* TRENDING */}
               <section className="mb-24">
 
@@ -1043,7 +1266,9 @@ const [currentSlide, setCurrentSlide] = useState(0);
   const categoryProducts =
     filteredProducts.filter(
       (p) =>
-        p.category === section.category
+        p.category?.toLowerCase() ===
+section.category.toLowerCase()
+        
     );
 
   if (categoryProducts.length === 0)
