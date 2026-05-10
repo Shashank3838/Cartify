@@ -161,6 +161,45 @@ const navigateWithLoading = (path) => {
   const featuredProducts = [...filteredProducts].sort(
     () => 0.5 - Math.random()
   );
+
+const categorySections = [
+  {
+    title: "⌚ Luxury Watches",
+    category: "Watches",
+    ref: useRef(null),
+  },
+
+  {
+    title: "👟 Premium Shoes",
+    category: "Shoes",
+    ref: useRef(null),
+  },
+
+  {
+    title: "🎮 Gaming Zone",
+    category: "Gaming",
+    ref: useRef(null),
+  },
+
+  {
+    title: "✨ Beauty Essentials",
+    category: "Beauty",
+    ref: useRef(null),
+  },
+
+  {
+    title: "⚡ Electronics",
+    category: "Electronics",
+    ref: useRef(null),
+  },
+
+  {
+    title: "🕶️ Fashion Picks",
+    category: "Fashion",
+    ref: useRef(null),
+  },
+];
+
 const heroSlides = [
   {
     title1: "Discover",
@@ -998,6 +1037,139 @@ const [currentSlide, setCurrentSlide] = useState(0);
                   featuredRef
                 )}
               </section>
+              {/* CATEGORY SECTIONS */}
+{categorySections.map((section) => {
+
+  const categoryProducts =
+    filteredProducts.filter(
+      (p) =>
+        p.category === section.category
+    );
+
+  if (categoryProducts.length === 0)
+    return null;
+
+  return (
+    <section
+      key={section.category}
+      className="mb-28"
+    >
+
+      {/* HEADER */}
+      <div
+        className="
+        flex items-center justify-between
+
+        mb-10
+      "
+      >
+
+        <div>
+
+          <h3
+            className="
+            text-5xl font-black
+
+            tracking-tight
+
+            text-gray-900
+          "
+          >
+            {section.title}
+          </h3>
+
+          <p
+            className="
+            text-gray-500 mt-3
+
+            text-lg
+          "
+          >
+            Curated premium picks in
+            {` ${section.category}`}
+          </p>
+        </div>
+
+        <button
+          className="
+          px-6 py-3 rounded-2xl
+
+          bg-black text-white
+
+          font-semibold
+
+          hover:scale-105
+
+          transition-all
+        "
+        >
+          Explore →
+        </button>
+      </div>
+
+      {/* CATEGORY PRODUCTS */}
+      <div className="relative">
+
+        {/* LEFT */}
+        <button
+          onClick={() =>
+            scroll(section.ref, "left")
+          }
+
+          className="
+          absolute left-[-18px]
+          top-1/2 -translate-y-1/2
+
+          z-20
+
+          w-14 h-14 rounded-full
+
+          bg-white/90 backdrop-blur-xl
+
+          shadow-2xl
+
+          hover:scale-110
+
+          transition-all
+        "
+        >
+          ←
+        </button>
+
+        {/* RIGHT */}
+        <button
+          onClick={() =>
+            scroll(section.ref, "right")
+          }
+
+          className="
+          absolute right-[-18px]
+          top-1/2 -translate-y-1/2
+
+          z-20
+
+          w-14 h-14 rounded-full
+
+          bg-white/90 backdrop-blur-xl
+
+          shadow-2xl
+
+          hover:scale-110
+
+          transition-all
+        "
+        >
+          →
+        </button>
+
+        {renderProducts(
+          categoryProducts,
+          section.ref
+        )}
+      </div>
+    </section>
+  );
+})}
             </>
           )}
         </>

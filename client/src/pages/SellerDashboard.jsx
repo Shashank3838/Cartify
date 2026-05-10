@@ -7,7 +7,8 @@ function SellerDashboard() {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
   const [category, setCategory] = useState("");
-
+const [brand, setBrand] = useState("");
+const [stock, setStock] = useState(1);
   const [products, setProducts] = useState([]);
 
   const [editingId, setEditingId] = useState(null);
@@ -113,12 +114,14 @@ function SellerDashboard() {
             localStorage.getItem("token"),
         },
         body: JSON.stringify({
-          name,
-          price,
-          description,
-          image,
-          category,
-        }),
+  name,
+  price,
+  description,
+  image,
+  category,
+  brand,
+  stock,
+}),
       }
     );
 
@@ -127,7 +130,8 @@ function SellerDashboard() {
     setDescription("");
     setImage("");
     setCategory("");
-
+setBrand("");
+setStock(1);
     fetchMyProducts();
   };
 
@@ -346,6 +350,17 @@ function SellerDashboard() {
                   }
                 />
 
+<input
+  type="text"
+  placeholder="Brand"
+  className="w-full px-5 py-4
+  rounded-2xl border"
+  value={brand}
+  onChange={(e) =>
+    setBrand(e.target.value)
+  }
+/>
+
                 <textarea
                   placeholder="Description"
                   rows={5}
@@ -356,6 +371,17 @@ function SellerDashboard() {
                     setDescription(e.target.value)
                   }
                 />
+
+<input
+  type="number"
+  placeholder="Stock Quantity"
+  className="w-full px-5 py-4
+  rounded-2xl border"
+  value={stock}
+  onChange={(e) =>
+    setStock(e.target.value)
+  }
+/>
 
                 <select
                   className="w-full px-5 py-4
@@ -370,25 +396,53 @@ function SellerDashboard() {
                   </option>
 
                   <option value="Electronics">
-                    Electronics
-                  </option>
+  Electronics
+</option>
 
-                  <option value="Fashion">
-                    Fashion
-                  </option>
+<option value="Fashion">
+  Fashion
+</option>
 
-                  <option value="Food">
-                    Food
-                  </option>
+<option value="Shoes">
+  Shoes
+</option>
 
-                  <option value="Toys">
-                    Toys
-                  </option>
+<option value="Accessories">
+  Accessories
+</option>
 
-                  <option value="Other">
-                    Other
-                  </option>
-                </select>
+<option value="Gaming">
+  Gaming
+</option>
+
+<option value="Lifestyle">
+  Lifestyle
+</option>
+
+<option value="Beauty">
+  Beauty
+</option>
+
+<option value="Sports">
+  Sports
+</option>
+
+<option value="Books">
+  Books
+</option>
+
+<option value="Food">
+  Food
+</option>
+
+<option value="Toys">
+  Toys
+</option>
+
+<option value="Other">
+  Other
+</option>
+</select>
 
                 <button
                   type="button"
@@ -548,6 +602,24 @@ function SellerDashboard() {
                                 {p.category}
                               </span>
                             )}
+
+{p.brand && (
+  <span
+    className="text-xs
+    px-3 py-1 rounded-full
+    bg-blue-100 text-blue-700"
+  >
+    {p.brand}
+  </span>
+)}
+
+<span
+  className="text-xs
+  px-3 py-1 rounded-full
+  bg-black text-white"
+>
+  Stock: {p.stock}
+</span>
 
                             {p.status ===
                             "approved" ? (
