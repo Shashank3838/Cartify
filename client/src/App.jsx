@@ -5,15 +5,23 @@ import { useState } from "react";
 import { Toaster } from "react-hot-toast";
 
 import Navbar from "./components/Navbar";
+
 import Home from "./pages/Home";
 import Cart from "./pages/Cart";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+
 import SellerDashboard from "./pages/SellerDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
+
 import MyOrders from "./pages/Orders";
+
 import ProductDetail from "./pages/ProductDetail";
+
 import Wishlist from "./pages/Wishlist";
+
+// 🔥 NEW CATEGORY PAGE
+import CategoryPage from "./pages/CategoryPage";
 
 function App() {
 
@@ -23,13 +31,15 @@ function App() {
   const [messages, setMessages] = useState([
     {
       role: "ai",
-      text: "Hey 👋 I’m Cartify AI. Ask me for product recommendations ✨",
+      text:
+        "Hey 👋 I’m Cartify AI. Ask me for product recommendations ✨",
     },
   ]);
 
   const [input, setInput] = useState("");
 
   const handleAI = () => {
+
     if (!input.trim()) return;
 
     const userMessage = {
@@ -43,6 +53,7 @@ function App() {
     const lower = input.toLowerCase();
 
     if (lower.includes("shoe")) {
+
       aiReply =
         "👟 Premium sneakers are trending right now. Check the Trending section 😮‍💨";
     }
@@ -51,6 +62,7 @@ function App() {
       lower.includes("cheap") ||
       lower.includes("budget")
     ) {
+
       aiReply =
         "💸 Try products under ₹2000 from our Fresh Arrivals section.";
     }
@@ -59,6 +71,7 @@ function App() {
       lower.includes("premium") ||
       lower.includes("best")
     ) {
+
       aiReply =
         "✨ Our Editor’s Picks section has the most premium products.";
     }
@@ -67,6 +80,7 @@ function App() {
       lower.includes("phone") ||
       lower.includes("gadget")
     ) {
+
       aiReply =
         "📱 Trending gadgets are HOT right now in Cartify.";
     }
@@ -86,6 +100,7 @@ function App() {
   };
 
   return (
+
     <Router>
 
       {/* 🔥 PREMIUM TOASTER */}
@@ -94,13 +109,18 @@ function App() {
         reverseOrder={false}
 
         toastOptions={{
+
           duration: 2500,
 
           style: {
+
             background: "#0f172a",
             color: "#fff",
+
             borderRadius: "18px",
+
             padding: "16px 20px",
+
             border:
               "1px solid rgba(255,255,255,0.08)",
 
@@ -135,11 +155,19 @@ function App() {
 
           <Routes>
 
+            {/* HOME */}
             <Route
               path="/"
               element={<Home />}
             />
 
+            {/* 🔥 CATEGORY PAGE */}
+            <Route
+              path="/category/:categoryName"
+              element={<CategoryPage />}
+            />
+
+            {/* CART */}
             <Route
               path="/cart"
               element={<Cart />}

@@ -171,24 +171,20 @@ const navigateWithLoading = (path) => {
   );
 
 const categorySections = [
+
   {
-    title: "⌚ Luxury Watches",
-    category: "Watches",
+    title: "🕶️ Premium Accessories",
+    category: "Accessories",
     ref: useRef(null),
   },
 
   {
     title: "👟 Premium Shoes",
-    category: "Shoes",
+    category: "Sneakers",
     ref: useRef(null),
   },
 
-  {
-    title: "🎮 Gaming Zone",
-    category: "Gaming",
-    ref: useRef(null),
-  },
-
+  
   {
     title: "✨ Beauty Essentials",
     category: "Beauty",
@@ -206,6 +202,19 @@ const categorySections = [
     category: "Fashion",
     ref: useRef(null),
   },
+
+  {
+    title: "🏀 Sports Collection",
+    category: "Sports",
+    ref: useRef(null),
+  },
+
+  {
+    title: "🧸 Toys & Fun",
+    category: "Toys",
+    ref: useRef(null),
+  },
+
 ];
 
 const heroSlides = [
@@ -240,31 +249,21 @@ const heroSlides = [
 
 const premiumCategories = [
 
-  {
-    title: "Luxury Watches",
-    subtitle: "Premium Timepieces",
-    image:
-      "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?q=80&w=1200&auto=format&fit=crop",
-    bg: "from-zinc-100 to-zinc-200",
-    category: "Watches",
-  },
-
+{
+  title: "Accessories",
+  subtitle: "Luxury Essentials",
+  image:
+    "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?q=80&w=1200&auto=format&fit=crop",
+  bg: "from-zinc-100 to-zinc-200",
+  category: "Accessories",
+},
   {
     title: "Sneakers",
     subtitle: "Streetwear Collection",
     image:
       "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1200&auto=format&fit=crop",
     bg: "from-blue-100 to-cyan-100",
-    category: "Shoes",
-  },
-
-  {
-    title: "Gaming",
-    subtitle: "Next Gen Setup",
-    image:
-      "https://images.unsplash.com/photo-1593305841991-05c297ba4575?q=80&w=1200&auto=format&fit=crop",
-    bg: "from-purple-100 to-pink-100",
-    category: "Gaming",
+    category: "Sneakers",
   },
 
   {
@@ -293,6 +292,24 @@ const premiumCategories = [
     bg: "from-slate-100 to-gray-200",
     category: "Electronics",
   },
+
+{
+  title: "Sports",
+  subtitle: "Performance Gear",
+  image:
+    "https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=1200&auto=format&fit=crop",
+  bg: "from-green-100 to-emerald-100",
+  category: "Sports",
+},
+
+{
+  title: "Toys",
+  subtitle: "Fun Collection",
+  image:
+    "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?q=80&w=1200&auto=format&fit=crop",
+  bg: "from-yellow-100 to-orange-100",
+  category: "Toys",
+},
 
 ];
 
@@ -1059,7 +1076,9 @@ const [currentSlide, setCurrentSlide] = useState(0);
         key={index}
 
         onClick={() =>
-          navigate(`/?q=${item.category}`)
+          navigate(
+  `/category/${item.category}`
+)
         }
 
         className={`

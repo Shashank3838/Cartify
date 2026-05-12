@@ -145,20 +145,17 @@ function Cart() {
                       razorpay_signature:
                         response.razorpay_signature,
 
-                      products:
-                        cart.map(
-                          (
-                            item
-                          ) => ({
-                            product:
-                              item.product
-                                ?._id ||
-                              item._id,
+                      products: cart.map((item) => ({
+  product:
+    item.product?._id ||
+    item._id,
 
-                            quantity:
-                              item.qty,
-                          })
-                        ),
+  quantity: item.qty,
+
+  seller:
+    item.seller ||
+    item.product?.seller,
+}))
                     }),
                   }
                 );
